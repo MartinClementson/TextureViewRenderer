@@ -22,16 +22,12 @@ public:
 private:
 	Model();
 
-	DirectX::XMFLOAT3 position;
-	DirectX::XMFLOAT3 scale;
-	DirectX::XMFLOAT4X4 rotation;
+	DirectX::XMFLOAT3 m_position;
+	DirectX::XMFLOAT3 m_scale;
+	DirectX::XMFLOAT4X4 m_rotation;
 
-	MeshDataHandler::MeshData * meshData;
-	Material * material;
-	DirectX::XMFLOAT4X4 TransformationMatrix;
-
-	ID3D11Buffer * vertexBuffer;
-	ID3D11Buffer * indexBuffer;
-
+	MeshDataHandler::MeshData * m_meshData;
+	Material * m_material;
+	DirectX::XMFLOAT4X4 m_TransformationMatrix;
 };
 

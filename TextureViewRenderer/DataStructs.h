@@ -1,8 +1,6 @@
 #pragma once
 #include "pch.h"
 
-
-
 	enum MeshType
 	{
 		PLANE,
