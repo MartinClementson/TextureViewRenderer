@@ -29,9 +29,5 @@ private:
 	MeshDataHandler::MeshData * m_meshData;
 	Material * m_material;
 	DirectX::XMFLOAT4X4 m_TransformationMatrix;
-
-	ID3D11Buffer * m_vertexBuffer;
-	ID3D11Buffer * m_indexBuffer;
-
 };
 

@@ -16,49 +16,16 @@ Model::Model(ID3D11Device * gDevice, MeshDataHandler::MeshData * meshData, Mater
 
 	DirectX::XMStoreFloat4x4(&this->m_rotation, DirectX::XMMatrixIdentity());
 	DirectX::XMStoreFloat4x4(&this->m_TransformationMatrix, DirectX::XMMatrixIdentity());
-
-	D3D11_BUFFER_DESC bufferDesc;
-	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	bufferDesc.ByteWidth = sizeof(VertexData) * meshData->numVertices;
-	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bufferDesc.CPUAccessFlags = 0;
-	bufferDesc.MiscFlags = 0;
-
-	// Fill in the subresource data.
-	D3D11_SUBRESOURCE_DATA vertexInitData;
-	vertexInitData.pSysMem = meshData->vertexData;
-	vertexInitData.SysMemPitch = 0;
-	vertexInitData.SysMemSlicePitch = 0;
-
-	// Create the vertex buffer.
-	HRESULT hr = gDevice->CreateBuffer(&bufferDesc, &vertexInitData, &m_vertexBuffer);
-
-	// Fill in a buffer description.
-	bufferDesc = { 0 };
-	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	bufferDesc.ByteWidth = sizeof(unsigned short) * meshData->numIndices;
-	bufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	bufferDesc.CPUAccessFlags = 0;
-	bufferDesc.MiscFlags = 0;
-
-	// Define the resource data.
-	D3D11_SUBRESOURCE_DATA indexInitData;
-	indexInitData.pSysMem = meshData->indexData;
-	indexInitData.SysMemPitch = 0;
-	indexInitData.SysMemSlicePitch = 0;
-
-	// Create the buffer with the device.
-	hr = gDevice->CreateBuffer(&bufferDesc, &indexInitData, &m_indexBuffer);
 }
 
 MeshDataHandler::MeshData * Model::GetMeshData()
 {
-	return nullptr;
+	return m_meshData;
 }
 
 Material * Model::GetMaterial()
 {
-	return nullptr;
+	return m_material;
 }
 
 int Model::Update()

@@ -1,6 +1,9 @@
 #include "MeshDataHandler.h"
-
 MeshDataHandler::MeshDataHandler()
+{
+}
+
+int MeshDataHandler::m_initialize(ID3D11Device * gDevice)
 {
 	const unsigned short cubeIndices[] =
 	{
@@ -144,6 +147,49 @@ MeshDataHandler::MeshDataHandler()
 	m_meshData[PLANE].numIndices = arraysize(planeIndices);
 	m_meshData[CUBE].numIndices = arraysize(cubeIndices);
 	m_meshData[COMPLEX].numIndices = arraysize(complexIndices);
+
+	for (int i = 0; i < NUM_MESH_TYPES; i++)
+	{
+		
+	
+		D3D11_BUFFER_DESC bufferDesc;
+		bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+		bufferDesc.ByteWidth = sizeof(VertexData) * m_meshData[i].numVertices;
+		bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+		bufferDesc.CPUAccessFlags = 0;
+		bufferDesc.MiscFlags = 0;
+
+		// Fill in the subresource data.
+		D3D11_SUBRESOURCE_DATA vertexInitData;
+		vertexInitData.pSysMem = m_meshData[i].vertexData;
+		vertexInitData.SysMemPitch = 0;
+		vertexInitData.SysMemSlicePitch = 0;
+
+		// Create the vertex buffer.
+		HRESULT hr = gDevice->CreateBuffer(&bufferDesc, &vertexInitData, &m_meshData[i].vertexBuffer);
+		if (hr != S_OK)
+			return 0;
+		// Fill in a buffer description.
+		bufferDesc = { 0 };
+		bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+		bufferDesc.ByteWidth = sizeof(unsigned short) * m_meshData[i].numIndices;
+		bufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+		bufferDesc.CPUAccessFlags = 0;
+		bufferDesc.MiscFlags = 0;
+
+		// Define the resource data.
+		D3D11_SUBRESOURCE_DATA indexInitData;
+		indexInitData.pSysMem = m_meshData[i].indexData;
+		indexInitData.SysMemPitch = 0;
+		indexInitData.SysMemSlicePitch = 0;
+
+		// Create the buffer with the device.
+		hr = gDevice->CreateBuffer(&bufferDesc, &indexInitData, &m_meshData[i].indexBuffer);
+		if (hr != S_OK)
+			return 0;
+	}
+
+	return 1;
 }
 
 const MeshDataHandler::MeshData * MeshDataHandler::GetMeshData(MeshType type)

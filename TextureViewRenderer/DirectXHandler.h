@@ -1,7 +1,7 @@
 #pragma once
 #include "pch.h"
 #include "TweakBar.h"
-
+#include "Model.h"
 
 
 #define WINDOW_WIDTH 800
@@ -41,7 +41,7 @@ private:
 
 
 	//Models
-	//Model m_models[3];
+	Model * m_models;
 
 public:
 	DirectXHandler();
