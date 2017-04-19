@@ -1,11 +1,11 @@
-#include "pch.h"
-
+#include "DataStructs.h"
 namespace UI
 {
 	struct UIelements {
 
 		bool  rotate		 = false;
 		float cameraDistance = 5.0f;
+		MeshType currentMesh;
 	 };
 
 
