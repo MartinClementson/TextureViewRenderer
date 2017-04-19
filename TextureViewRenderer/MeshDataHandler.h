@@ -4,14 +4,6 @@
 class MeshDataHandler
 {
 public:
-	enum MeshType
-	{
-		PLANE,
-		CUBE,
-		COMPLEX,
-
-		NUM_MESH_TYPES
-	};
 	struct MeshData
 	{
 		MeshType type;

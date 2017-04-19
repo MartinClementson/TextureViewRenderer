@@ -1,6 +1,16 @@
 #pragma once
 #include "pch.h"
 
+
+
+	enum MeshType
+	{
+		PLANE,
+		CUBE,
+		COMPLEX,
+
+		NUM_MESH_TYPES
+	};
 // Constant buffer used to send MVP matrices to the vertex shader.
 struct ModelViewProjection
 {
