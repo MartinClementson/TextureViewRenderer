@@ -10,7 +10,7 @@ HWND InitWindow(HINSTANCE hInstance)
 	wcex.style = CS_HREDRAW | CS_VREDRAW;
 	wcex.lpfnWndProc = WndProc;
 	wcex.hInstance = hInstance;
-	wcex.lpszClassName = L"BTH_D3D_DEMO";
+	wcex.lpszClassName = L"TextureViewer";
 	if (!RegisterClassEx(&wcex))
 		return false;
 
@@ -18,7 +18,7 @@ HWND InitWindow(HINSTANCE hInstance)
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
 	HWND handle = CreateWindow(
-		L"BTH_D3D_DEMO",
+		L"TextureViewer",
 		L"Texture Viewer",
 		WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT,
