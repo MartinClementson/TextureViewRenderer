@@ -70,38 +70,38 @@ int MeshDataHandler::m_initialize(ID3D11Device * gDevice)
 
 	const VertexData cubeData[] =
 	{
-		{ DirectX::XMFLOAT3(-0.5f, -0.5f, -0.5f), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(-0.5f, -0.5f,  0.5f), DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(-0.5f,  0.5f, -0.5f), DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(-0.5f,  0.5f,  0.5f), DirectX::XMFLOAT3(0.0f, 1.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.5f, -0.5f, -0.5f), DirectX::XMFLOAT3(1.0f, 0.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(0.5f, -0.5f,  0.5f), DirectX::XMFLOAT3(1.0f, 0.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.5f,  0.5f, -0.5f), DirectX::XMFLOAT3(1.0f, 1.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(0.5f,  0.5f,  0.5f), DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(-0.5f, -0.5f, -0.5f),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f) },
+		{ DirectX::XMFLOAT3(-0.5f, -0.5f,  0.5f),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(-0.5f,  0.5f, -0.5f),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f) },
+		{ DirectX::XMFLOAT3(-0.5f,  0.5f,  0.5f),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 1.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(0.5f, -0.5f, -0.5f), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 0.0f, 0.0f) },
+		{ DirectX::XMFLOAT3(0.5f, -0.5f,  0.5f), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 0.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(0.5f,  0.5f, -0.5f), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 1.0f, 0.0f) },
+		{ DirectX::XMFLOAT3(0.5f,  0.5f,  0.5f), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f) },
 	};
 
 	const VertexData planeData[] =
 	{
-		{ DirectX::XMFLOAT3(-0.5f, -0.5f, -0.5f), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(-0.5f, -0.5f,  0.5f), DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(-0.5f,  0.5f, -0.5f), DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(-0.5f,  0.5f,  0.5f), DirectX::XMFLOAT3(0.0f, 1.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.5f, -0.5f, -0.5f), DirectX::XMFLOAT3(1.0f, 0.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(0.5f, -0.5f,  0.5f), DirectX::XMFLOAT3(1.0f, 0.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.5f,  0.5f, -0.5f), DirectX::XMFLOAT3(1.0f, 1.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(0.5f,  0.5f,  0.5f), DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(-0.5f, -0.5f, -0.5f),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f) },
+		{ DirectX::XMFLOAT3(-0.5f, -0.5f,  0.5f),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(-0.5f,  0.5f, -0.5f),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f) },
+		{ DirectX::XMFLOAT3(-0.5f,  0.5f,  0.5f),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 1.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(0.5f, -0.5f, -0.5f), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 0.0f, 0.0f) },
+		{ DirectX::XMFLOAT3(0.5f, -0.5f,  0.5f), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 0.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(0.5f,  0.5f, -0.5f), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 1.0f, 0.0f) },
+		{ DirectX::XMFLOAT3(0.5f,  0.5f,  0.5f), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f) },
 	};
 
 	const VertexData complexData[] =
 	{
-		{ DirectX::XMFLOAT3(-0.5f, -0.5f, -0.5f), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(-0.5f, -0.5f,  0.5f), DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(-0.5f,  0.5f, -0.5f), DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(-0.5f,  0.5f,  0.5f), DirectX::XMFLOAT3(0.0f, 1.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.5f, -0.5f, -0.5f), DirectX::XMFLOAT3(1.0f, 0.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(0.5f, -0.5f,  0.5f), DirectX::XMFLOAT3(1.0f, 0.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.5f,  0.5f, -0.5f), DirectX::XMFLOAT3(1.0f, 1.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(0.5f,  0.5f,  0.5f), DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(-0.5f, -0.5f, -0.5f),DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f) },
+		{ DirectX::XMFLOAT3(-0.5f, -0.5f,  0.5f),DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(-0.5f,  0.5f, -0.5f),DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f) },
+		{ DirectX::XMFLOAT3(-0.5f,  0.5f,  0.5f),DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(0.0f, 1.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(0.5f, -0.5f, -0.5f), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 0.0f, 0.0f) },
+		{ DirectX::XMFLOAT3(0.5f, -0.5f,  0.5f), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 0.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(0.5f,  0.5f, -0.5f), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 1.0f, 0.0f) },
+		{ DirectX::XMFLOAT3(0.5f,  0.5f,  0.5f), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f) },
 	};
 
 	m_meshData[PLANE].vertexData = new VertexData[arraysize(planeData)];

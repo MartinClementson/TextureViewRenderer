@@ -61,47 +61,5 @@ void GS_main(
 		element.pos = mul(element.pos, Projection);
 		element.Texture = input[i].Texture;
 		output.Append(element);
-
-
-
-
-
-
 	}
-
-	
-	output.RestartStrip();
-
-	for (uint j = 0; j < 3; j++)
-	{
-
-
-		GSOutput element;
-		
-		
-		element.normal = float4(input[j].normal, 1.0f);
-		element.normal = normalize(mul(nWorld, faceNormal));
-		
-		element.pos = input[j].pos;
-		
-		element.pos.z = element.pos.z + 1;
-		
-		
-
-		element.pos = mul(element.pos, World);
-		element.wPos = element.pos;
-		element.pos = mul(element.pos, View);
-		element.pos = mul(element.pos, Projection);
-		
-		element.Texture = input[j].Texture;
-
-
-		output.Append(element);
-
-	}
-
-	
-	output.RestartStrip();
-	
-
 }

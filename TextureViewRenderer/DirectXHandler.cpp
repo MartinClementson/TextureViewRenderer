@@ -29,7 +29,6 @@ DirectXHandler::~DirectXHandler()
 
 int DirectXHandler::Initialize(HWND wndHandle)
 {
-	
 	assert(CreateContext(wndHandle) == 1);
 	SetViewPort(WINDOW_WIDTH, WINDOW_HEIGHT);
 	this->m_tweakbar = UI::TweakBar::GetInstance();
@@ -41,6 +40,7 @@ int DirectXHandler::Initialize(HWND wndHandle)
 	this->m_DeviceContext->DSSetShader(nullptr, nullptr, 0);
 	this->m_DeviceContext->GSSetShader(m_GeometryShader, nullptr, 0);
 	this->m_DeviceContext->PSSetShader(m_PixelShader, nullptr, 0);
+	MeshDataHandler::GetInstance()->m_initialize(m_Device);
 	//m_DeviceContext->PSSetShaderResources(0, 1, &m_TextureView);
 	Material hej;
 	for (size_t i = 0; i < NUM_MESH_TYPES; i++)
@@ -83,8 +83,8 @@ int DirectXHandler::Render(float dt)
 	//UINT32 vertexSize = sizeof(TriangleVertex);
 	//UINT32 offset = 0;
 	//m_DeviceContext->IASetVertexBuffers(0, 1, &gVertexBuffer, &vertexSize, &offset);
-	//m_DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	//m_DeviceContext->IASetInputLayout(gVertexLayout);
+	m_DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	m_DeviceContext->IASetInputLayout(m_VertexLayout);
 	//
 	//
 	m_DeviceContext->DrawIndexed(m_models[elements->currentMesh]->GetMeshData()->numIndices, 0, 0);
@@ -193,6 +193,7 @@ int DirectXHandler::CreateShaders()
 		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 20, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
+	
 	hr = m_Device->CreateInputLayout(inputDesc, ARRAYSIZE(inputDesc), pVS->GetBufferPointer(), pVS->GetBufferSize(), &m_VertexLayout);
 	if (FAILED(hr))
 		return 0;

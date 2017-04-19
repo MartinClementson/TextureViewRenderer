@@ -21,7 +21,8 @@ struct ModelViewProjection
 struct VertexData
 {
 	DirectX::XMFLOAT3 pos;
-	DirectX::XMFLOAT3 color;
+	DirectX::XMFLOAT2 UV;
+	DirectX::XMFLOAT3 normal;
 };
 
 struct Material
