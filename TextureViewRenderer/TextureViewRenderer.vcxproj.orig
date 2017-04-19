@@ -153,10 +153,13 @@
     <ClCompile Include="TweakBar.cpp" />
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <ClInclude Include="DataStructs.h" />
-    <ClInclude Include="DirectXHandler.h" />
     <ClInclude Include="MeshDataHandler.h" />
     <ClInclude Include="Model.h" />
+=======
+    <ClInclude Include="DirectXHandler.h" />
+>>>>>>> origin/DirectXHandler
     <ClInclude Include="pch.h" />
     <ClInclude Include="TweakBar.h" />
   </ItemGroup>
