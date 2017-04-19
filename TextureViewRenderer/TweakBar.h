@@ -2,6 +2,11 @@
 
 namespace UI
 {
+	struct UIelements {
+
+		bool  rotate		 = false;
+		float cameraDistance = 5.0f;
+	 };
 
 
 	class TweakBar
@@ -11,8 +16,9 @@ namespace UI
 		static std::shared_ptr<UI::TweakBar> GetInstance();
 		int Initialize(ID3D11Device* gDevice, float windowWidth, float windowHeight);
 		void Render();
+		UIelements* GetUiData() { return &m_Uidata; };
 	private:
-		bool m_rotate = false;
+		UIelements m_Uidata;
 		TweakBar();
 		TwBar *m_barHandle;
 	public: // callback functions

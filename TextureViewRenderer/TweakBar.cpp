@@ -15,12 +15,13 @@ TweakBar::TweakBar()
 
 void TW_CALL TweakBar::RotationCall(void * data)
 {
-	if (TweakBar::GetInstance()->m_rotate)
+	std::shared_ptr<UI::TweakBar> tweakBar = TweakBar::GetInstance();
+	if (tweakBar->m_Uidata.rotate)
 	{
-		TweakBar::GetInstance()->m_rotate = false;
+		tweakBar->m_Uidata.rotate = false;
 	}
 	else {
-		TweakBar::GetInstance()->m_rotate = true;
+		tweakBar->m_Uidata.rotate = true;
 	}
 }
 
@@ -31,8 +32,9 @@ TweakBar::~TweakBar()
 
 std::shared_ptr<UI::TweakBar> UI::TweakBar::GetInstance()
 {
-	static TweakBar instance = TweakBar();
-	return std::shared_ptr<UI::TweakBar>(&instance);
+	static TweakBar* instance =  new TweakBar();
+	static std::shared_ptr<UI::TweakBar> ptr = std::shared_ptr<UI::TweakBar>(instance);
+	return ptr;
 }
 
 int UI::TweakBar::Initialize(ID3D11Device * gDevice, float windowWidth, float windowHeight)
