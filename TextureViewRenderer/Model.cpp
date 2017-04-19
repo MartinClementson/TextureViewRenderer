@@ -6,7 +6,7 @@ Model::Model()
 {
 }
 
-Model::Model(ID3D11Device * gDevice, MeshDataHandler::MeshData * meshData, Material * material)
+Model::Model(ID3D11Device * gDevice,  MeshDataHandler::MeshData * meshData, Material * material)
 {
 	this->m_meshData = meshData;
 	this->m_material = material;

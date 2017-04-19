@@ -17,7 +17,7 @@ public:
 	};
 
 
-	const MeshDataHandler::MeshData * MeshDataHandler::GetMeshData(MeshType type);
+	 MeshDataHandler::MeshData * MeshDataHandler::GetMeshData(MeshType type);
 	static MeshDataHandler * GetInstance();
 	~MeshDataHandler();
 private:

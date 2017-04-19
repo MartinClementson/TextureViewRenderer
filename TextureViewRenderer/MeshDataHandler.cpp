@@ -192,7 +192,7 @@ int MeshDataHandler::m_initialize(ID3D11Device * gDevice)
 	return 1;
 }
 
-const MeshDataHandler::MeshData * MeshDataHandler::GetMeshData(MeshType type)
+ MeshDataHandler::MeshData * MeshDataHandler::GetMeshData(MeshType type)
 {
 	return &m_meshData[type];
 }

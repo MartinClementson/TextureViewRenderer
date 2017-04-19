@@ -48,7 +48,7 @@ private:
 
 
 	//Models
-	Model * m_models;
+	Model* m_models[NUM_MESH_TYPES];
 
 public:
 	DirectXHandler();

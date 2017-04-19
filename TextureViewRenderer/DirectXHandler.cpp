@@ -21,11 +21,15 @@ DirectXHandler::~DirectXHandler()
 	m_depthStencilView	!= nullptr ? m_depthStencilView	->Release(): NULL;
 	m_Device			!= nullptr ? m_Device			->Release(): NULL;
 	m_DeviceContext		!= nullptr ? m_DeviceContext	->Release(): NULL;
+	for (size_t i = 0; i < NUM_MESH_TYPES; i++)
+	{
+		delete m_models[i];
+	}
 }
 
 int DirectXHandler::Initialize(HWND wndHandle)
 {
-
+	
 	assert(CreateContext(wndHandle) == 1);
 	SetViewPort(WINDOW_WIDTH, WINDOW_HEIGHT);
 	this->m_tweakbar = UI::TweakBar::GetInstance();
@@ -38,16 +42,30 @@ int DirectXHandler::Initialize(HWND wndHandle)
 	this->m_DeviceContext->GSSetShader(m_GeometryShader, nullptr, 0);
 	this->m_DeviceContext->PSSetShader(m_PixelShader, nullptr, 0);
 	//m_DeviceContext->PSSetShaderResources(0, 1, &m_TextureView);
+	Material hej;
+	for (size_t i = 0; i < NUM_MESH_TYPES; i++)
+	{
+		m_models[i] = new Model(m_Device, MeshDataHandler::GetInstance()->GetMeshData(MeshType(i)),&hej);
+	}
 	return 0;
 }
 
 int DirectXHandler::Update(float dt)
 {
+	UI::UIelements* elements = m_tweakbar->GetUiData();
+
+	ID3D11Buffer* vertBuff  = m_models[elements->currentMesh]->GetMeshData()->vertexBuffer;
+	ID3D11Buffer* indexBuff = m_models[elements->currentMesh]->GetMeshData()->indexBuffer;
+	UINT32 vertexSize = sizeof(VertexData);
+	UINT32 offset = 0;
+	m_DeviceContext->IASetVertexBuffers(0, 1, &vertBuff, &vertexSize, &offset);
+	m_DeviceContext->IASetIndexBuffer(indexBuff, DXGI_FORMAT::DXGI_FORMAT_R8_SINT,0);
 	return 0;
 }
 
 int DirectXHandler::Render(float dt)
 {
+	UI::UIelements* elements = m_tweakbar->GetUiData();
 	m_DeviceContext->ClearRenderTargetView(m_BackbufferRTV, clearColor);
 	m_DeviceContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH, 1, 0);
 
@@ -69,6 +87,7 @@ int DirectXHandler::Render(float dt)
 	//m_DeviceContext->IASetInputLayout(gVertexLayout);
 	//
 	//
+	m_DeviceContext->DrawIndexed(m_models[elements->currentMesh]->GetMeshData()->numIndices, 0, 0);
 	
 	this->m_tweakbar->Render();
 	m_SwapChain->Present(0, 0);
