@@ -1,5 +1,6 @@
 #pragma once
 #include "DataStructs.h"
+#include "pch.h"
 class MeshDataHandler
 {
 public:
@@ -14,7 +15,7 @@ public:
 	struct MeshData
 	{
 		MeshType type;
-		TextureViewRenderer::VertexData * vertexData;
+		VertexData * vertexData;
 		unsigned short * indexData;
 		unsigned short numVertices;
 		unsigned short numIndices;

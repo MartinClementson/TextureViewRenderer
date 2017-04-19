@@ -5,6 +5,7 @@
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include "AntTweakBar.h"
+#include <DirectXMath.h>
 
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>

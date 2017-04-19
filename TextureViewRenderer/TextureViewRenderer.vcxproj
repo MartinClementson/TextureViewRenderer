@@ -147,9 +147,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MeshDataHandler.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="TweakBar.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DataStructs.h" />
+    <ClInclude Include="MeshDataHandler.h" />
+    <ClInclude Include="Model.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="TweakBar.h" />
   </ItemGroup>

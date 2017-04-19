@@ -65,7 +65,7 @@ MeshDataHandler::MeshDataHandler()
 		1,7,5,
 	};
 
-	const TextureViewRenderer::VertexData cubeData[] =
+	const VertexData cubeData[] =
 	{
 		{ DirectX::XMFLOAT3(-0.5f, -0.5f, -0.5f), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f) },
 		{ DirectX::XMFLOAT3(-0.5f, -0.5f,  0.5f), DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f) },
@@ -77,7 +77,7 @@ MeshDataHandler::MeshDataHandler()
 		{ DirectX::XMFLOAT3(0.5f,  0.5f,  0.5f), DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f) },
 	};
 
-	const TextureViewRenderer::VertexData planeData[] =
+	const VertexData planeData[] =
 	{
 		{ DirectX::XMFLOAT3(-0.5f, -0.5f, -0.5f), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f) },
 		{ DirectX::XMFLOAT3(-0.5f, -0.5f,  0.5f), DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f) },
@@ -89,7 +89,7 @@ MeshDataHandler::MeshDataHandler()
 		{ DirectX::XMFLOAT3(0.5f,  0.5f,  0.5f), DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f) },
 	};
 
-	const TextureViewRenderer::VertexData complexData[] =
+	const VertexData complexData[] =
 	{
 		{ DirectX::XMFLOAT3(-0.5f, -0.5f, -0.5f), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f) },
 		{ DirectX::XMFLOAT3(-0.5f, -0.5f,  0.5f), DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f) },
@@ -101,9 +101,9 @@ MeshDataHandler::MeshDataHandler()
 		{ DirectX::XMFLOAT3(0.5f,  0.5f,  0.5f), DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f) },
 	};
 
-	meshData[PLANE].vertexData = new TextureViewRenderer::VertexData[arraysize(planeData)];
-	meshData[CUBE].vertexData = new TextureViewRenderer::VertexData[arraysize(cubeData)];
-	meshData[COMPLEX].vertexData = new TextureViewRenderer::VertexData[arraysize(complexData)];
+	meshData[PLANE].vertexData = new VertexData[arraysize(planeData)];
+	meshData[CUBE].vertexData = new VertexData[arraysize(cubeData)];
+	meshData[COMPLEX].vertexData = new VertexData[arraysize(complexData)];
 
 	meshData[PLANE].indexData = new unsigned short[arraysize(planeIndices)];
 	meshData[CUBE].indexData = new unsigned short[arraysize(cubeIndices)];
@@ -149,8 +149,6 @@ MeshDataHandler::MeshDataHandler()
 const MeshDataHandler::MeshData * MeshDataHandler::GetMeshData(MeshType type)
 {
 	return &meshData[type];
-
-	return nullptr;
 }
 
 MeshDataHandler * MeshDataHandler::GetInstance()
