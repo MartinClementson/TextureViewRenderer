@@ -54,6 +54,9 @@ int DirectXHandler::Update(float dt)
 {
 	UI::UIelements* elements = m_tweakbar->GetUiData();
 
+	m_wvpData.Projection = m_cam.GetProjectionMatrix();
+	m_wvpData.View		 = m_cam.GetViewMatrix();
+
 	ID3D11Buffer* vertBuff  = m_models[elements->currentMesh]->GetMeshData()->vertexBuffer;
 	ID3D11Buffer* indexBuff = m_models[elements->currentMesh]->GetMeshData()->indexBuffer;
 	UINT32 vertexSize = sizeof(VertexData);
@@ -296,6 +299,10 @@ int DirectXHandler::CreateConstantBuffer()
 //	gDeviceContext->PSSetConstantBuffers(0, 1, &lightConstBuffer);
 //}
 	return 1;
+}
+
+void DirectXHandler::UpdateConstBuffer(WVPConstantBuffer * data)
+{
 }
 
 void DirectXHandler::SetViewPort(float width, float height)

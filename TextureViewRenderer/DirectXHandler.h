@@ -2,7 +2,7 @@
 #include "pch.h"
 #include "TweakBar.h"
 #include "Model.h"
-
+#include "Camera.h"
 
 
 class DirectXHandler
@@ -27,7 +27,7 @@ private:
 	ID3D11Buffer*			m_wvpConstantBuffer = nullptr;
 	ID3D11Buffer*			m_lightConstBuffer  = nullptr;
 
-	WVPConstantBuffer wvpConstantBufferData;
+	WVPConstantBuffer m_wvpData;
 
 	
 
@@ -50,6 +50,7 @@ private:
 	//Models
 	Model* m_models[NUM_MESH_TYPES];
 
+	Camera m_cam;
 public:
 	DirectXHandler();
 	~DirectXHandler();
@@ -61,6 +62,7 @@ private:
 	int CreateContext(HWND wndHandle);
 	int CreateShaders();
 	int CreateConstantBuffer();
+	void UpdateConstBuffer(WVPConstantBuffer* data);
 	void SetViewPort(float width, float height);
 };
 
