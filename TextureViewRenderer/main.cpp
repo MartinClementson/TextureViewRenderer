@@ -48,8 +48,20 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	MSG msg = { 0 };
 	HWND wndHandle = InitWindow(hInstance); //1. Skapa fönster
 	ShowWindow(wndHandle, nCmdShow);
-	getchar();
-	getchar();
+	while (WM_QUIT != msg.message)
+	{
+		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+		else
+		{
+			//Render(); //8. Rendera
+			//TwDraw();
+			//gSwapChain->Present(0, 0); //9. Växla front- och back-buffer
+		}
+	}
 	DestroyWindow(wndHandle);
 	_CrtDumpMemoryLeaks();
 	return 0;
