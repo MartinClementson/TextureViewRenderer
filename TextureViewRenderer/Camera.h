@@ -29,7 +29,7 @@ private:
 	DirectX::XMFLOAT3 m_viewTarget;
 	DirectX::XMFLOAT3 m_up;
 
-	float m_FoV, m_farPlane, m_nearPlane;
+	float m_FoV, m_farPlane, m_nearPlane, m_wWidth, m_wHeight;
 
 
 	int m_updateViewMatrix();
