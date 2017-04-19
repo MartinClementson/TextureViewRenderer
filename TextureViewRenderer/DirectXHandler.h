@@ -4,8 +4,7 @@
 #include "Model.h"
 
 
-#define WINDOW_WIDTH 800
-#define WINDOW_HEIGHT 600
+
 class DirectXHandler
 {
 private:
