@@ -9,18 +9,18 @@ DirectXHandler::DirectXHandler()
 
 DirectXHandler::~DirectXHandler()
 {
-	m_VertexBuffer != nullptr ? m_VertexBuffer->Release(): NULL;
-	m_TextureView  != nullptr ? m_TextureView->Release() : NULL;
-	m_VertexLayout != nullptr ? m_VertexLayout->Release(): NULL;
-	m_VertexShader != nullptr ? m_VertexShader->Release(): NULL;
-	m_PixelShader  != nullptr ? m_PixelShader->Release() : NULL;
-	//m_GeometryShader->Release();
-	m_BackbufferRTV->Release();
-	m_SwapChain->Release();
-	m_depthBuffer->Release();
-	m_depthStencilView->Release();
-	m_Device->Release();
-	m_DeviceContext->Release();
+	m_VertexBuffer		!= nullptr ? m_VertexBuffer		->Release(): NULL;
+	m_TextureView		!= nullptr ? m_TextureView		->Release(): NULL;
+	m_VertexLayout		!= nullptr ? m_VertexLayout	    ->Release(): NULL;
+	m_VertexShader		!= nullptr ? m_VertexShader		->Release(): NULL;
+	m_PixelShader		!= nullptr ? m_PixelShader	    ->Release(): NULL;
+	m_GeometryShader	!= nullptr ? m_GeometryShader	->Release(): NULL;
+	m_BackbufferRTV		!= nullptr ? m_BackbufferRTV	->Release(): NULL;
+	m_SwapChain			!= nullptr ? m_SwapChain		->Release(): NULL;
+	m_depthBuffer		!= nullptr ? m_depthBuffer		->Release(): NULL;
+	m_depthStencilView	!= nullptr ? m_depthStencilView	->Release(): NULL;
+	m_Device			!= nullptr ? m_Device			->Release(): NULL;
+	m_DeviceContext		!= nullptr ? m_DeviceContext	->Release(): NULL;
 }
 
 int DirectXHandler::Initialize(HWND wndHandle)

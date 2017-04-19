@@ -10,7 +10,7 @@ HWND InitWindow(HINSTANCE hInstance)
 	wcex.style = CS_HREDRAW | CS_VREDRAW;
 	wcex.lpfnWndProc = WndProc;
 	wcex.hInstance = hInstance;
-	wcex.lpszClassName = L"BTH_D3D_DEMO";
+	wcex.lpszClassName = L"TextureViewer";
 	if (!RegisterClassEx(&wcex))
 		return false;
 
@@ -18,7 +18,7 @@ HWND InitWindow(HINSTANCE hInstance)
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
 	HWND handle = CreateWindow(
-		L"BTH_D3D_DEMO",
+		L"TextureViewer",
 		L"Texture Viewer",
 		WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT,
@@ -34,27 +34,29 @@ HWND InitWindow(HINSTANCE hInstance)
 }
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
-	DirectXHandler directX;
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	MSG msg = { 0 };
-	HWND wndHandle = InitWindow(hInstance); //1. Skapa fönster
-	directX.Initialize(wndHandle);
-	
-	ShowWindow(wndHandle, nCmdShow);
-	while (WM_QUIT != msg.message)
 	{
-		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+		DirectXHandler directX;
+		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+		MSG msg = { 0 };
+		HWND wndHandle = InitWindow(hInstance); //1. Skapa fönster
+		directX.Initialize(wndHandle);
+		
+		ShowWindow(wndHandle, nCmdShow);
+		while (WM_QUIT != msg.message)
 		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
+			if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+			{
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+			}
+			else
+			{
+				directX.Update(0.0f);
+				directX.Render(0.0f);
+			}
 		}
-		else
-		{
-			directX.Update(0.0f);
-			directX.Render(0.0f);
-		}
+		DestroyWindow(wndHandle);
 	}
-	DestroyWindow(wndHandle);
 	_CrtDumpMemoryLeaks();
 	return 0;
 }
