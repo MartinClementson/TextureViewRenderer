@@ -58,7 +58,7 @@ int UI::TweakBar::Initialize(ID3D11Device * gDevice, float windowWidth, float wi
 	// Create a type for the enum shapeEV
 	TwType shapeType = TwDefineEnum("ShapeType", shapeEV, NUM_MESH_TYPES);
 	// add 'g_CurrentShape' to 'bar': this is a variable of type ShapeType. Its key shortcuts are [<] and [>].
-	TwAddVarRW(m_barHandle, "Shape", shapeType, &m_Uidata.currentMesh, " keyIncr='<' keyDecr='>' help='Change object shape.' ");
+	TwAddVarRW(m_barHandle, "Shape", shapeType, &m_Uidata.currentMesh, "group = Mesh keyIncr='<' keyDecr='>' help='Change object shape.' ");
 	return result;
 }
 
