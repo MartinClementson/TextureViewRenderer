@@ -19,7 +19,7 @@ HWND InitWindow(HINSTANCE hInstance)
 
 	HWND handle = CreateWindow(
 		L"BTH_D3D_DEMO",
-		L"BTH Direct3D Demo",
+		L"Texture Viewer",
 		WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,

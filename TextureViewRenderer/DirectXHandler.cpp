@@ -9,12 +9,34 @@ DirectXHandler::DirectXHandler()
 
 DirectXHandler::~DirectXHandler()
 {
+	m_VertexBuffer != nullptr ? m_VertexBuffer->Release(): NULL;
+	m_TextureView  != nullptr ? m_TextureView->Release() : NULL;
+	m_VertexLayout != nullptr ? m_VertexLayout->Release(): NULL;
+	m_VertexShader != nullptr ? m_VertexShader->Release(): NULL;
+	m_PixelShader  != nullptr ? m_PixelShader->Release() : NULL;
+	//m_GeometryShader->Release();
+	m_BackbufferRTV->Release();
+	m_SwapChain->Release();
+	m_depthBuffer->Release();
+	m_depthStencilView->Release();
+	m_Device->Release();
+	m_DeviceContext->Release();
 }
 
 int DirectXHandler::Initialize(HWND wndHandle)
 {
-	CreateContext(wndHandle);
+
+	assert(CreateContext(wndHandle) == 1);
 	SetViewPort(WINDOW_WIDTH, WINDOW_HEIGHT);
+	this->m_tweakbar = UI::TweakBar::GetInstance();
+	this->m_tweakbar->Initialize(m_Device, WINDOW_WIDTH, WINDOW_HEIGHT);
+	assert(CreateShaders() == 1);
+	this->m_DeviceContext->VSSetShader(m_VertexShader, nullptr, 0);
+	this->m_DeviceContext->HSSetShader(nullptr, nullptr, 0);
+	this->m_DeviceContext->DSSetShader(nullptr, nullptr, 0);
+	this->m_DeviceContext->GSSetShader(m_GeometryShader, nullptr, 0);
+	this->m_DeviceContext->PSSetShader(m_PixelShader, nullptr, 0);
+	//m_DeviceContext->PSSetShaderResources(0, 1, &m_TextureView);
 	return 0;
 }
 
@@ -46,8 +68,8 @@ int DirectXHandler::Render(float dt)
 	//m_DeviceContext->IASetInputLayout(gVertexLayout);
 	//
 	//
-	//gDeviceContext->Draw(6, 0);
-
+	
+	this->m_tweakbar->Render();
 	m_SwapChain->Present(0, 0);
 	return 0;
 }
@@ -120,7 +142,88 @@ int DirectXHandler::CreateContext(HWND wndHandle)
 		m_DeviceContext->OMSetRenderTargets(1, &m_BackbufferRTV, m_depthStencilView);
 
 	
-	return hr;
+	return 1;
+}
+
+int DirectXHandler::CreateShaders()
+{
+	HRESULT hr;
+	//create vertex shader
+	ID3DBlob* pVS = nullptr;
+	D3DCompileFromFile(
+		L"Vertex.hlsl", // filename
+		nullptr,		// optional macros
+		nullptr,		// optional include files
+		"VS_main",		// entry point
+		"vs_5_0",		// shader model (target)
+		0,				// shader compile options
+		0,				// effect compile options
+		&pVS,			// double pointer to ID3DBlob		
+		nullptr			// pointer for Error Blob messages.
+						// how to use the Error blob, see here
+						// https://msdn.microsoft.com/en-us/library/windows/desktop/hh968107(v=vs.85).aspx
+	);
+
+	hr = m_Device->CreateVertexShader(pVS->GetBufferPointer(), pVS->GetBufferSize(), nullptr, &m_VertexShader);
+	if (FAILED(hr))
+		return 0;
+	//create input layout (verified using vertex shader)
+	D3D11_INPUT_ELEMENT_DESC inputDesc[] = {
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,  0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 20, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+	};
+	hr = m_Device->CreateInputLayout(inputDesc, ARRAYSIZE(inputDesc), pVS->GetBufferPointer(), pVS->GetBufferSize(), &m_VertexLayout);
+	if (FAILED(hr))
+		return 0;
+	// we do not need anymore this COM object, so we release it.
+	pVS->Release();
+
+	//create pixel shader
+	ID3DBlob* pPS = nullptr;
+	D3DCompileFromFile(
+		L"Fragment.hlsl", // filename
+		nullptr,		// optional macros
+		nullptr,		// optional include files
+		"PS_main",		// entry point
+		"ps_5_0",		// shader model (target)
+		0,				// shader compile options
+		0,				// effect compile options
+		&pPS,			// double pointer to ID3DBlob		
+		nullptr			// pointer for Error Blob messages.
+						// how to use the Error blob, see here
+						// https://msdn.microsoft.com/en-us/library/windows/desktop/hh968107(v=vs.85).aspx
+	);
+
+	hr =m_Device->CreatePixelShader(pPS->GetBufferPointer(), pPS->GetBufferSize(), nullptr, &m_PixelShader);
+	if (FAILED(hr))
+		return 0;
+	// we do not need anymore this COM object, so we release it.
+	pPS->Release();
+
+	//create geometry shader
+
+	ID3DBlob* pGS = nullptr;
+	D3DCompileFromFile(
+		L"GeometryShader.hlsl",
+		nullptr,
+		nullptr,
+		"GS_main",
+		"gs_5_0",
+		0,
+		0,
+		&pGS,
+		nullptr);
+
+
+
+
+	hr = m_Device->CreateGeometryShader(pGS->GetBufferPointer(), pGS->GetBufferSize(), nullptr, &m_GeometryShader);
+	if (FAILED(hr))
+		return 0;
+	pGS->Release();
+
+	return 1;
 }
 
 void DirectXHandler::SetViewPort(float width, float height)

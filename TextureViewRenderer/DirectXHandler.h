@@ -46,6 +46,7 @@ public:
 
 private:
 	int CreateContext(HWND wndHandle);
+	int CreateShaders();
 	void SetViewPort(float width, float height);
 };
 
