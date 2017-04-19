@@ -5,112 +5,106 @@ MeshDataHandler::MeshDataHandler()
 
 int MeshDataHandler::m_initialize(ID3D11Device * gDevice)
 {
-	const unsigned short cubeIndices[] =
+	const unsigned int cubeIndices[] =
 	{
-		0,2,1, // -x
-		1,2,3,
-
-		4,5,6, // +x
-		5,7,6,
-
-		0,1,5, // -y
-		0,5,4,
-
-		2,6,7, // +y
-		2,7,3,
-
-		0,4,6, // -z
-		0,6,2,
-
-		1,3,7, // +z
-		1,7,5,
+		0,1,2,
+		0,2,3,
+		3,2,4,
+		3,4,5,
+		5,4,6,
+		5,6,7,
+		7,6,1,
+		7,1,0,
+		0,3,5,
+		0,5,7,
+		1,4,2,
+		1,6,4
 	};
 
-	const unsigned short planeIndices[] =
+	const unsigned int planeIndices[] =
 	{
-		0,2,1, // -x
-		1,2,3,
-
-		4,5,6, // +x
-		5,7,6,
-
-		0,1,5, // -y
-		0,5,4,
-
-		2,6,7, // +y
-		2,7,3,
-
-		0,4,6, // -z
-		0,6,2,
-
-		1,3,7, // +z
-		1,7,5,
+		0,1,2,
+		0,2,3,
+		3,2,4,
+		3,4,5,
+		5,4,6,
+		5,6,7,
+		7,6,1,
+		7,1,0,
+		0,3,5,
+		0,5,7,
+		1,4,2,
+		1,6,4
 	};
 
-	const unsigned short complexIndices[] =
+	const unsigned int complexIndices[] =
 	{
-		0,2,1, // -x
-		1,2,3,
-
-		4,5,6, // +x
-		5,7,6,
-
-		0,1,5, // -y
-		0,5,4,
-
-		2,6,7, // +y
-		2,7,3,
-
-		0,4,6, // -z
-		0,6,2,
-
-		1,3,7, // +z
-		1,7,5,
+		0,1,2,
+		0,2,3,
+		3,2,4,
+		3,4,5,
+		5,4,6,
+		5,6,7,
+		7,6,1,
+		7,1,0,
+		0,3,5,
+		0,5,7,
+		1,4,2,
+		1,6,4
 	};
+
+	//cubeVerts[0].position = Float3(-0.5, 2.5,0.5);     //0
+	//cubeVerts[1].position = Float3(-0.5, 0.0,0.5);     //1
+	//cubeVerts[2].position = Float3(0.5, 0.0, 0.5);     //2
+	//cubeVerts[3].position = Float3(0.5, 2.5, 0.5);     //3
+	//cubeVerts[4].position = Float3(0.5, 0.0,-0.5);     //4
+	//cubeVerts[5].position = Float3(0.5, 2.5,-0.5);     //5
+	//cubeVerts[6].position = Float3(-0.5,0.0,-0.5);     //6
+	//cubeVerts[7].position = Float3(-0.5,2.5,-0.5);     //7
 
 	const VertexData cubeData[] =
 	{
-		{ DirectX::XMFLOAT3(-0.5f, -0.5f, -0.5f),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(-0.5f, -0.5f,  0.5f),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(-0.5f,  0.5f, -0.5f),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(-0.5f,  0.5f,  0.5f),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 1.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.5f, -0.5f, -0.5f), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 0.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(0.5f, -0.5f,  0.5f), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 0.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.5f,  0.5f, -0.5f), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 1.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(0.5f,  0.5f,  0.5f), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(-0.5, 2.5,0.5),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f) },
+		{ DirectX::XMFLOAT3(-0.5, 0.0,0.5),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(0.5, 0.0, 0.5),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f) },
+		{ DirectX::XMFLOAT3(0.5, 2.5, 0.5),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 1.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(0.5, 0.0,-0.5), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 0.0f, 0.0f) },
+		{ DirectX::XMFLOAT3(0.5, 2.5,-0.5), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 0.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(-0.5,0.0,-0.5), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 1.0f, 0.0f) },
+		{ DirectX::XMFLOAT3(-0.5,2.5,-0.5), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f) },
 	};
 
 	const VertexData planeData[] =
 	{
-		{ DirectX::XMFLOAT3(-0.5f, -0.5f, -0.5f),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(-0.5f, -0.5f,  0.5f),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(-0.5f,  0.5f, -0.5f),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(-0.5f,  0.5f,  0.5f),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 1.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.5f, -0.5f, -0.5f), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 0.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(0.5f, -0.5f,  0.5f), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 0.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.5f,  0.5f, -0.5f), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 1.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(0.5f,  0.5f,  0.5f), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(-0.5, 2.5,0.5),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f) },
+		{ DirectX::XMFLOAT3(-0.5, 0.0,0.5),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(0.5, 0.0, 0.5),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f) },
+		{ DirectX::XMFLOAT3(0.5, 2.5, 0.5),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 1.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(0.5, 0.0,-0.5), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 0.0f, 0.0f) },
+		{ DirectX::XMFLOAT3(0.5, 2.5,-0.5), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 0.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(-0.5,0.0,-0.5), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 1.0f, 0.0f) },
+		{ DirectX::XMFLOAT3(-0.5,2.5,-0.5), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f) },
 	};
 
 	const VertexData complexData[] =
 	{
-		{ DirectX::XMFLOAT3(-0.5f, -0.5f, -0.5f),DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(-0.5f, -0.5f,  0.5f),DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(-0.5f,  0.5f, -0.5f),DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(-0.5f,  0.5f,  0.5f),DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(0.0f, 1.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.5f, -0.5f, -0.5f), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 0.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(0.5f, -0.5f,  0.5f), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 0.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.5f,  0.5f, -0.5f), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 1.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(0.5f,  0.5f,  0.5f), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(-0.5, 2.5,0.5),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f) },
+		{ DirectX::XMFLOAT3(-0.5, 0.0,0.5),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(0.5, 0.0, 0.5),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f) },
+		{ DirectX::XMFLOAT3(0.5, 2.5, 0.5),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 1.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(0.5, 0.0,-0.5), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 0.0f, 0.0f) },
+		{ DirectX::XMFLOAT3(0.5, 2.5,-0.5), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 0.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(-0.5,0.0,-0.5), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 1.0f, 0.0f) },
+		{ DirectX::XMFLOAT3(-0.5,2.5,-0.5), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f) },
 	};
 
 	m_meshData[PLANE].vertexData = new VertexData[arraysize(planeData)];
 	m_meshData[CUBE].vertexData = new VertexData[arraysize(cubeData)];
 	m_meshData[COMPLEX].vertexData = new VertexData[arraysize(complexData)];
 
-	m_meshData[PLANE].indexData = new unsigned short[arraysize(planeIndices)];
-	m_meshData[CUBE].indexData = new unsigned short[arraysize(cubeIndices)];
-	m_meshData[COMPLEX].indexData = new unsigned short[arraysize(complexIndices)];
+	m_meshData[PLANE].indexData = new unsigned int[arraysize(planeIndices)];
+	m_meshData[CUBE].indexData = new unsigned int[arraysize(cubeIndices)];
+	m_meshData[COMPLEX].indexData = new unsigned int[arraysize(complexIndices)];
 
 	for (int i = 0; i < arraysize(planeData); i++)
 	{
@@ -172,7 +166,7 @@ int MeshDataHandler::m_initialize(ID3D11Device * gDevice)
 		// Fill in a buffer description.
 		bufferDesc = { 0 };
 		bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-		bufferDesc.ByteWidth = sizeof(unsigned short) * m_meshData[i].numIndices;
+		bufferDesc.ByteWidth = sizeof(unsigned int) * m_meshData[i].numIndices;
 		bufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 		bufferDesc.CPUAccessFlags = 0;
 		bufferDesc.MiscFlags = 0;
@@ -209,7 +203,5 @@ MeshDataHandler::~MeshDataHandler()
 	{
 		delete[] data.indexData;
 		delete[] data.vertexData;
-
-
 	}
 }

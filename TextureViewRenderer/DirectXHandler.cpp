@@ -59,7 +59,7 @@ int DirectXHandler::Update(float dt)
 	UINT32 vertexSize = sizeof(VertexData);
 	UINT32 offset = 0;
 	m_DeviceContext->IASetVertexBuffers(0, 1, &vertBuff, &vertexSize, &offset);
-	m_DeviceContext->IASetIndexBuffer(indexBuff, DXGI_FORMAT::DXGI_FORMAT_R8_SINT,0);
+	m_DeviceContext->IASetIndexBuffer(indexBuff, DXGI_FORMAT::DXGI_FORMAT_R32_UINT, 0);
 	return 0;
 }
 
