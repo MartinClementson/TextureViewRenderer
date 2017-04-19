@@ -31,6 +31,7 @@ int DirectXHandler::Initialize(HWND wndHandle)
 	this->m_tweakbar = UI::TweakBar::GetInstance();
 	this->m_tweakbar->Initialize(m_Device, WINDOW_WIDTH, WINDOW_HEIGHT);
 	assert(CreateShaders() == 1);
+	assert(CreateConstantBuffer() == 1);
 	this->m_DeviceContext->VSSetShader(m_VertexShader, nullptr, 0);
 	this->m_DeviceContext->HSSetShader(nullptr, nullptr, 0);
 	this->m_DeviceContext->DSSetShader(nullptr, nullptr, 0);
@@ -223,6 +224,57 @@ int DirectXHandler::CreateShaders()
 		return 0;
 	pGS->Release();
 
+	return 1;
+}
+
+int DirectXHandler::CreateConstantBuffer()
+{
+	HRESULT hr;
+	//Gör en description av buffern
+	CD3D11_BUFFER_DESC bufferDesc;
+	bufferDesc.ByteWidth		   = sizeof(WVPConstantBuffer);
+	bufferDesc.BindFlags		   = D3D11_BIND_CONSTANT_BUFFER; //detta är en konstant buffer
+	bufferDesc.Usage			   = D3D11_USAGE_DYNAMIC; //Read only from gpu, write from cpu
+	bufferDesc.CPUAccessFlags	   = D3D11_CPU_ACCESS_WRITE;  // vi måste förtydliga det.
+	bufferDesc.MiscFlags		   = 0;
+	bufferDesc.StructureByteStride = 0;
+
+	//Vi skapar buffern i device
+
+	hr = m_Device->CreateBuffer(&bufferDesc, nullptr, &m_wvpConstantBuffer);
+
+	if (SUCCEEDED(hr)) {
+
+		m_DeviceContext->GSSetConstantBuffers(0, 1, &m_wvpConstantBuffer);
+	}
+	else
+		return 0;
+
+
+	//skapa Light constantBuffer
+
+
+	//Gör en description av buffern
+//CD3D11_BUFFER_DESC bufferDescL;
+//
+//
+//ZeroMemory(&bufferDescL, sizeof(bufferDescL));
+//
+//bufferDescL.ByteWidth = sizeof(lightBuffer);
+//bufferDescL.BindFlags = D3D11_BIND_CONSTANT_BUFFER; //detta är en konstant buffer
+//bufferDescL.Usage = D3D11_USAGE_DYNAMIC; //Read only from gpu, write from cpu
+//bufferDescL.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;  // vi måste förtydliga det.
+//bufferDescL.MiscFlags = 0;
+//bufferDescL.StructureByteStride = 0;
+//
+////Vi skapar buffern i device
+//
+//hr = gDevice->CreateBuffer(&bufferDescL, nullptr, &lightConstBuffer);
+//
+//if (SUCCEEDED(hr)) {
+//
+//	gDeviceContext->PSSetConstantBuffers(0, 1, &lightConstBuffer);
+//}
 	return 1;
 }
 

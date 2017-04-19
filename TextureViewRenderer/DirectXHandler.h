@@ -7,6 +7,14 @@
 class DirectXHandler
 {
 private:
+	struct WVPConstantBuffer
+	{
+		DirectX::XMFLOAT4X4 World;
+		DirectX::XMFLOAT4X4 View;
+		DirectX::XMFLOAT4X4 Projection;
+		DirectX::XMFLOAT4X4 nWorld;
+
+	};
 	float clearColor[4] = { 1, 0, 0, 1 };
 	IDXGISwapChain*		 m_SwapChain	 = nullptr;
 	ID3D11Device*		 m_Device		 = nullptr;
@@ -18,7 +26,7 @@ private:
 	ID3D11Buffer*			m_wvpConstantBuffer = nullptr;
 	ID3D11Buffer*			m_lightConstBuffer  = nullptr;
 
-	//WorldViewProjectionConstantBuffer wvpConstantBufferData;
+	WVPConstantBuffer wvpConstantBufferData;
 
 	
 
@@ -35,7 +43,7 @@ private:
 	//Textures
 	ID3D11Texture2D			 *m_Texture		= nullptr;
 	ID3D11ShaderResourceView *m_TextureView = nullptr;
-	std::shared_ptr<UI::TweakBar> m_tweakbar;
+	UI::TweakBar* m_tweakbar;
 
 public:
 	DirectXHandler();
@@ -47,6 +55,7 @@ public:
 private:
 	int CreateContext(HWND wndHandle);
 	int CreateShaders();
+	int CreateConstantBuffer();
 	void SetViewPort(float width, float height);
 };
 

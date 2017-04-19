@@ -28,13 +28,15 @@ TweakBar::TweakBar()
 TweakBar::~TweakBar()
 {
 	TwTerminate();
+
 }
 
-std::shared_ptr<UI::TweakBar> UI::TweakBar::GetInstance()
+UI::TweakBar* UI::TweakBar::GetInstance()
 {
-	static TweakBar* instance =  new TweakBar();
-	static std::shared_ptr<UI::TweakBar> ptr = std::shared_ptr<UI::TweakBar>(instance);
-	return ptr;
+	static TweakBar instance;
+
+	
+	return &instance;
 }
 
 int UI::TweakBar::Initialize(ID3D11Device * gDevice, float windowWidth, float windowHeight)
@@ -68,3 +70,5 @@ void TweakBar::Render()
 {
 	TwDraw();
 }
+
+
