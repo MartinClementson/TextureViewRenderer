@@ -1,4 +1,5 @@
-#include "pch.h"
+
+#include "DirectXHandler.h"
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 
@@ -33,10 +34,12 @@ HWND InitWindow(HINSTANCE hInstance)
 }
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
-
+	DirectXHandler directX;
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	MSG msg = { 0 };
 	HWND wndHandle = InitWindow(hInstance); //1. Skapa fönster
+	directX.Initialize(wndHandle);
+	
 	ShowWindow(wndHandle, nCmdShow);
 	while (WM_QUIT != msg.message)
 	{
@@ -47,9 +50,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		}
 		else
 		{
-			//Render(); //8. Rendera
-			//TwDraw();
-			//gSwapChain->Present(0, 0); //9. Växla front- och back-buffer
+			directX.Update(0.0f);
+			directX.Render(0.0f);
 		}
 	}
 	DestroyWindow(wndHandle);

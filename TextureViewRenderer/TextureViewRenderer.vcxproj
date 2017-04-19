@@ -146,10 +146,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DirectXHandler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TweakBar.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DirectXHandler.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="TweakBar.h" />
   </ItemGroup>
