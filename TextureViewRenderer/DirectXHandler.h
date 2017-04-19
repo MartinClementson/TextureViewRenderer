@@ -2,6 +2,8 @@
 #include "pch.h"
 #include "TweakBar.h"
 
+
+
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
 class DirectXHandler
@@ -36,6 +38,10 @@ private:
 	ID3D11Texture2D			 *m_Texture		= nullptr;
 	ID3D11ShaderResourceView *m_TextureView = nullptr;
 	std::shared_ptr<UI::TweakBar> m_tweakbar;
+
+
+	//Models
+	//Model m_models[3];
 
 public:
 	DirectXHandler();

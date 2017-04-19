@@ -13,12 +13,12 @@ public:
 		unsigned short numIndices;
 	};
 
-	MeshData meshData[NUM_MESH_TYPES];
 
 	const MeshDataHandler::MeshData * MeshDataHandler::GetMeshData(MeshType type);
 	static MeshDataHandler * GetInstance();
 	~MeshDataHandler();
 private:
+	MeshData m_meshData[NUM_MESH_TYPES];
 	template <typename T, unsigned S>
 	inline unsigned arraysize(const T(&v)[S]) { return S; }
 	MeshDataHandler();

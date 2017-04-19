@@ -101,54 +101,54 @@ MeshDataHandler::MeshDataHandler()
 		{ DirectX::XMFLOAT3(0.5f,  0.5f,  0.5f), DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f) },
 	};
 
-	meshData[PLANE].vertexData = new VertexData[arraysize(planeData)];
-	meshData[CUBE].vertexData = new VertexData[arraysize(cubeData)];
-	meshData[COMPLEX].vertexData = new VertexData[arraysize(complexData)];
+	m_meshData[PLANE].vertexData = new VertexData[arraysize(planeData)];
+	m_meshData[CUBE].vertexData = new VertexData[arraysize(cubeData)];
+	m_meshData[COMPLEX].vertexData = new VertexData[arraysize(complexData)];
 
-	meshData[PLANE].indexData = new unsigned short[arraysize(planeIndices)];
-	meshData[CUBE].indexData = new unsigned short[arraysize(cubeIndices)];
-	meshData[COMPLEX].indexData = new unsigned short[arraysize(complexIndices)];
+	m_meshData[PLANE].indexData = new unsigned short[arraysize(planeIndices)];
+	m_meshData[CUBE].indexData = new unsigned short[arraysize(cubeIndices)];
+	m_meshData[COMPLEX].indexData = new unsigned short[arraysize(complexIndices)];
 
 	for (int i = 0; i < arraysize(planeData); i++)
 	{
-		meshData[PLANE].vertexData[i] = planeData[i];
+		m_meshData[PLANE].vertexData[i] = planeData[i];
 	}
 	for (int i = 0; i < arraysize(cubeData); i++)
 	{
-		meshData[CUBE].vertexData[i] = cubeData[i];
+		m_meshData[CUBE].vertexData[i] = cubeData[i];
 	}
 	for (int i = 0; i < arraysize(complexData); i++)
 	{
-		meshData[COMPLEX].vertexData[i] = complexData[i];
+		m_meshData[COMPLEX].vertexData[i] = complexData[i];
 	}
 
 	for (int i = 0; i < arraysize(planeIndices); i++)
 	{
-		meshData[PLANE].indexData[i] = planeIndices[i];
+		m_meshData[PLANE].indexData[i] = planeIndices[i];
 	}
 
 	for (int i = 0; i < arraysize(cubeIndices); i++)
 	{
-		meshData[CUBE].indexData[i] = cubeIndices[i];
+		m_meshData[CUBE].indexData[i] = cubeIndices[i];
 	}
 
 	for (int i = 0; i < arraysize(complexIndices); i++)
 	{
-		meshData[COMPLEX].indexData[i] = complexIndices[i];
+		m_meshData[COMPLEX].indexData[i] = complexIndices[i];
 	}
 
-	meshData[PLANE].numVertices = arraysize(planeData);
-	meshData[CUBE].numVertices = arraysize(cubeData);
-	meshData[COMPLEX].numVertices = arraysize(complexData);
+	m_meshData[PLANE].numVertices = arraysize(planeData);
+	m_meshData[CUBE].numVertices = arraysize(cubeData);
+	m_meshData[COMPLEX].numVertices = arraysize(complexData);
 
-	meshData[PLANE].numIndices = arraysize(planeIndices);
-	meshData[CUBE].numIndices = arraysize(cubeIndices);
-	meshData[COMPLEX].numIndices = arraysize(complexIndices);
+	m_meshData[PLANE].numIndices = arraysize(planeIndices);
+	m_meshData[CUBE].numIndices = arraysize(cubeIndices);
+	m_meshData[COMPLEX].numIndices = arraysize(complexIndices);
 }
 
 const MeshDataHandler::MeshData * MeshDataHandler::GetMeshData(MeshType type)
 {
-	return &meshData[type];
+	return &m_meshData[type];
 }
 
 MeshDataHandler * MeshDataHandler::GetInstance()
@@ -159,9 +159,11 @@ MeshDataHandler * MeshDataHandler::GetInstance()
 
 MeshDataHandler::~MeshDataHandler()
 {
-	for (MeshDataHandler::MeshData data : meshData)
+	for (MeshDataHandler::MeshData data : m_meshData)
 	{
 		delete[] data.indexData;
 		delete[] data.vertexData;
+
+
 	}
 }
