@@ -22,7 +22,19 @@ namespace UI
 		TweakBar();
 		TwBar *m_barHandle;
 	public: // callback functions
-		static void TW_CALL RotationCall(void* data);
+		
+		static void TW_CALL SetRotation(const void *value, void * /*clientData*/)
+		{
+			std::shared_ptr<UI::TweakBar> tweakBar = TweakBar::GetInstance();
+			tweakBar->m_Uidata.rotate = *static_cast<const bool *>(value);
+			
+		}
+		static void TW_CALL GetRotation(void *value, void * /*clientData*/)
+		{
+			std::shared_ptr<UI::TweakBar> tweakBar = TweakBar::GetInstance();
+			*static_cast<bool *>(value) = tweakBar->m_Uidata.rotate;
+		}
+
 	};
 
 }

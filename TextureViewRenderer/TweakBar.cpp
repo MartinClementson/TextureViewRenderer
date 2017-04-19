@@ -13,17 +13,17 @@ TweakBar::TweakBar()
 {
 }
 
-void TW_CALL TweakBar::RotationCall(void * data)
-{
-	std::shared_ptr<UI::TweakBar> tweakBar = TweakBar::GetInstance();
-	if (tweakBar->m_Uidata.rotate)
-	{
-		tweakBar->m_Uidata.rotate = false;
-	}
-	else {
-		tweakBar->m_Uidata.rotate = true;
-	}
-}
+//void TW_CALL TweakBar::RotationCall(void * data)
+//{
+//	std::shared_ptr<UI::TweakBar> tweakBar = TweakBar::GetInstance();
+//	if (tweakBar->m_Uidata.rotate)
+//	{
+//		tweakBar->m_Uidata.rotate = false;
+//	}
+//	else {
+//		tweakBar->m_Uidata.rotate = true;
+//	}
+//}
 
 TweakBar::~TweakBar()
 {
@@ -44,7 +44,8 @@ int UI::TweakBar::Initialize(ID3D11Device * gDevice, float windowWidth, float wi
 	result= TwWindowSize(windowWidth, windowHeight);
 	m_barHandle = TwNewBar("Tweak Ui");
 
-	TwAddButton(m_barHandle, "Rotation On/Off", TweakBar::RotationCall, NULL, "group = Mesh");
+	//TwAddButton(m_barHandle, "Rotation On/Off", TweakBar::RotationCall, NULL, "group = Mesh");
+	TwAddVarCB(m_barHandle, "Rotation", TW_TYPE_BOOLCPP, SetRotation, GetRotation, NULL, "group=Mesh key=r");
 	TwAddVarRW(m_barHandle, "Camera Distance", TW_TYPE_FLOAT, &m_Uidata.cameraDistance, "group = Camera step = 1.0 min =5.0");
 	//TwAddButton(m_barHandle, "Bounce", BounceCall, NULL, "group = Rotation");
 	//TwAddVarRW(m_barHandle, "Rotation", TW_TYPE_FLOAT, &animSpeed, "step = 0.001 group = Rotation");
