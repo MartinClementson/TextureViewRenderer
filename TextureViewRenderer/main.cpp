@@ -1,14 +1,4 @@
-#include <windows.h>
-
-#include <d3d11.h>
-#include <d3dcompiler.h>
-#include "AntTweakBar.h"
-
-#define _CRTDBG_MAP_ALLOC
-#include <stdlib.h>
-#include <crtdbg.h>
-#pragma comment (lib, "d3d11.lib")
-#pragma comment (lib, "d3dcompiler.lib")
+#include "pch.h"
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 

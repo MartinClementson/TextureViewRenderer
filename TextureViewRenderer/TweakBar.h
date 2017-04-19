@@ -1,8 +1,8 @@
 #include "pch.h"
-#include "AntTweakBar.h"
+
 namespace UI
 {
-	LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+
 
 	class TweakBar
 	{

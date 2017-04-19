@@ -2,13 +2,13 @@
 #include "pch.h"
 #include "TweakBar.h"
 using namespace UI;
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-
-	if (TwEventWin(hWnd, message, wParam, lParam)) // send event message to AntTweakBar
-		return 0; // event has been handled by AntTweakBar
-	return 0;
-}
+//LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+//{
+//
+//	if (TwEventWin(hWnd, message, wParam, lParam)) // send event message to AntTweakBar
+//		return 0; // event has been handled by AntTweakBar
+//	return 0;
+//}
 TweakBar::TweakBar()
 {
 }
