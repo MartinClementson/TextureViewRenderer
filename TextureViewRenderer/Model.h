@@ -17,6 +17,7 @@ public:
 	DirectX::XMFLOAT3 GetPosition();
 	DirectX::XMFLOAT3 GetScale();
 	DirectX::XMFLOAT4X4 GetRotation();
+	DirectX::XMFLOAT4X4 GetTransformationMatrix();
 
 	~Model();
 private:
