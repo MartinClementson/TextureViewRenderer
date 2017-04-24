@@ -40,7 +40,7 @@ void GS_main(
 		GSOutput element;
 		
 		element.normal = faceNormal;
-
+		element.normal = input[i].normal;
 	
 		element.pos = float4(mul(input[i].pos, transpose(World)).xyz, 1.0);
 		element.wPos = element.pos;
