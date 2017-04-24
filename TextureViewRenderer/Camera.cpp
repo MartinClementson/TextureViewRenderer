@@ -6,7 +6,7 @@ Camera::Camera()
 	DirectX::XMStoreFloat4x4(&this->m_projectionMatrix, DirectX::XMMatrixIdentity());
 
 	this->m_position = DirectX::XMFLOAT3(0.0, 0.0, 0.0);
-	this->m_viewTarget = DirectX::XMFLOAT3(0.0, 0.0, 0.0);
+	this->m_viewTarget = DirectX::XMFLOAT3(0.0, 0.0, 1.0);
 	this->m_up = DirectX::XMFLOAT3(0.0, 1.0, 0.0);
 
 	this->m_FoV = 70.0f;
@@ -100,6 +100,7 @@ float Camera::GetFoV()
 
 int Camera::m_updateViewMatrix()
 {
+	
 	DirectX::XMStoreFloat4x4(
 		&this->m_viewMatrix,
 		DirectX::XMMatrixLookAtLH(
@@ -108,6 +109,7 @@ int Camera::m_updateViewMatrix()
 			DirectX::XMLoadFloat3(&m_up)
 		)
 	);
+
 
 	return 0;
 }
