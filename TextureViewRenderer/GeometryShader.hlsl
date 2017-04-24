@@ -11,8 +11,6 @@ struct GSInput
 	float4 pos :SV_POSITION;
 	float2 Texture : TEXCOORD0;
 	float3 normal: NORMAL;
-
-
 };
 
 struct GSOutput
@@ -21,8 +19,6 @@ struct GSOutput
 	float2 Texture : TEXCOORD0;
 	float3 normal : NORMAL;
 	float4 wPos : WORLDPOS;
-
-
 };
 
 
@@ -53,4 +49,5 @@ void GS_main(
 		element.Texture = input[i].Texture;
 		output.Append(element);
 	}
+
 }

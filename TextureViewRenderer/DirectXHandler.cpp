@@ -62,6 +62,7 @@ int DirectXHandler::Update(float dt)
 
 	ID3D11Buffer* vertBuff  = m_models[elements->currentMesh]->GetMeshData()->vertexBuffer;
 	ID3D11Buffer* indexBuff = m_models[elements->currentMesh]->GetMeshData()->indexBuffer;
+	
 	UINT32 vertexSize = sizeof(VertexData);
 	UINT32 offset = 0;
 	m_DeviceContext->IASetVertexBuffers(0, 1, &vertBuff, &vertexSize, &offset);
