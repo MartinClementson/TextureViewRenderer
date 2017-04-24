@@ -86,6 +86,7 @@ int MeshDataHandler::m_initialize(ID3D11Device * gDevice)
 		{ DirectX::XMFLOAT3(-0.5,.5,-0.5), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f) },
 	};
 
+
 	const VertexData complexData[] =
 	{
 		{ DirectX::XMFLOAT3(-0.5, 2.5,0.5),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f) },

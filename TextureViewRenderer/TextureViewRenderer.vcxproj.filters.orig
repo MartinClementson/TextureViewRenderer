@@ -21,14 +21,19 @@
     <ClCompile Include="TweakBar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="MeshDataHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Model.cpp">
-=======
     <ClCompile Include="DirectXHandler.cpp">
->>>>>>> origin/DirectXHandler
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -39,7 +44,6 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="DataStructs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -49,8 +53,17 @@
     <ClInclude Include="Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-=======
     <ClInclude Include="DirectXHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+<<<<<<< HEAD
+    <ClInclude Include="ObjLoader.h">
+=======
+    <ClInclude Include="tiny_obj_loader.h">
+>>>>>>> objloader
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -64,6 +77,5 @@
     <FxCompile Include="Vertex.hlsl">
       <Filter>Resource Files</Filter>
     </FxCompile>
->>>>>>> origin/DirectXHandler
   </ItemGroup>
 </Project>

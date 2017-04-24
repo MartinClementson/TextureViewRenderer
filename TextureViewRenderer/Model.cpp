@@ -83,6 +83,11 @@ DirectX::XMFLOAT4X4 Model::GetRotation()
 
 }
 
+DirectX::XMFLOAT4X4 Model::GetTransformationMatrix()
+{
+	return m_TransformationMatrix;
+}
+
 Model::~Model()
 {
 }
