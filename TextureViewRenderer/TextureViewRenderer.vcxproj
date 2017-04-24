@@ -160,6 +160,7 @@
     <ClInclude Include="MeshDataHandler.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="tiny_obj_loader.h" />
     <ClInclude Include="TweakBar.h" />
   </ItemGroup>
   <ItemGroup>
