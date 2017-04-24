@@ -44,6 +44,8 @@ private:
 	Model* m_models[NUM_MESH_TYPES];
 
 	Camera m_cam;
+
+	float m_rotationValue = 0;
 public:
 	DirectXHandler();
 	~DirectXHandler();

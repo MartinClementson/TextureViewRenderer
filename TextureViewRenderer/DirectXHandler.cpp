@@ -58,6 +58,18 @@ int DirectXHandler::Update(float dt)
 	m_cam.SetPosition(newPos);
 	m_wvpData.projection = m_cam.GetProjectionMatrix();
 	m_wvpData.view		 = m_cam.GetViewMatrix();
+
+	if (elements->rotate)
+	{
+		DirectX::XMFLOAT4X4 rotMatrix;
+		m_rotationValue += 0.001;
+		if (m_rotationValue >= 360)
+			m_rotationValue = 0;
+		DirectX::XMStoreFloat4x4(&rotMatrix, DirectX::XMMatrixRotationY(m_rotationValue));
+		m_models[elements->currentMesh]->SetRotation(rotMatrix);
+		m_models[elements->currentMesh]->Update();
+	}
+	//m_models[elements->currentMesh]->SetRotation()
 	m_wvpData.model		 = m_models[elements->currentMesh]->GetTransformationMatrix();
 	UpdateConstBuffer(&m_wvpData);
 
