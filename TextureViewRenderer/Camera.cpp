@@ -5,20 +5,20 @@ Camera::Camera()
 	DirectX::XMStoreFloat4x4(&this->m_viewMatrix, DirectX::XMMatrixIdentity());
 	DirectX::XMStoreFloat4x4(&this->m_projectionMatrix, DirectX::XMMatrixIdentity());
 
-	this->m_position = DirectX::XMFLOAT3(0.0, 0.0, 0.0);
-	this->m_viewTarget = DirectX::XMFLOAT3(0.0, 0.0, 1.0);
+	this->m_position = DirectX::XMFLOAT3(0.0, 0.0, 5.0);
+	this->m_viewTarget = DirectX::XMFLOAT3(0.0, 0.0, 0.0);
 	this->m_up = DirectX::XMFLOAT3(0.0, 1.0, 0.0);
 
 	this->m_FoV = 70.0f;
-	this->m_nearPlane = 0.1f;
+	this->m_nearPlane = 0.001f;
 	this->m_farPlane = 1000.0f;
 	this->m_wWidth = WINDOW_WIDTH;
 	this->m_wHeight = WINDOW_HEIGHT;
 	m_updateViewMatrix();
 	m_updateProjectionMatrix();
+
+
 }
-
-
 Camera::~Camera()
 {
 }
@@ -40,8 +40,8 @@ int Camera::SetViewTarget(DirectX::XMFLOAT3 viewTarget)
 int Camera::SetFoV(float fov)
 {
 	this->m_FoV = fov;
-	return 0;
 	m_updateProjectionMatrix();
+	return 0;
 }
 
 int Camera::SetWindowHW(float height, float width)

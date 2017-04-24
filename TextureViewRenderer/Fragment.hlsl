@@ -7,7 +7,7 @@
 //};
 
 SamplerState SampleType; //modifies how the pixels are written to the polygon face when shaded
-Texture2D shaderTexture;
+//Texture2D shaderTexture;
 
 
 struct PS_IN
@@ -16,13 +16,12 @@ struct PS_IN
 	float2 Texture : TEXCOORD0;
 	float3 Normal : NORMAL;
 	float4 wPos :  WORLDPOS;
-	
-
 };
 
 
 float4 PS_main(PS_IN input)  : SV_Target
 { 
+
 	return float4(0.0f,0.0f,1.0f,1.0f);
 //float4 camPos = { 0.0f,0.0f,-2.0f,0.0f };
 //

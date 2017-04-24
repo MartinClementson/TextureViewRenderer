@@ -1,4 +1,4 @@
-cbuffer WorldViewProjectionConstantBuffer : register(b0)
+cbuffer WorldViewProjectionConstantBuffer : register(b1)
 {
 	matrix World;
 	matrix View;
@@ -8,11 +8,9 @@ cbuffer WorldViewProjectionConstantBuffer : register(b0)
 
 struct GSInput
 {
-	float4 pos :SV_POSITION;
+	float4 pos :POSITION;
 	float2 Texture : TEXCOORD0;
 	float3 normal: NORMAL;
-
-
 };
 
 struct GSOutput
@@ -21,8 +19,6 @@ struct GSOutput
 	float2 Texture : TEXCOORD0;
 	float3 normal : NORMAL;
 	float4 wPos : WORLDPOS;
-
-
 };
 
 
@@ -37,13 +33,13 @@ void GS_main(
 	float3 faceEdgeA = input[1].pos - input[0].pos;
 	float3 faceEdgeB = input[2].pos - input[0].pos;
 	float3 faceNormal = normalize(cross(faceEdgeA, faceEdgeB));
-	
+	faceNormal = mul(transpose(World), faceNormal);
+	faceNormal = normalize(faceNormal);
 	for (uint i = 0; i < 3; i++)
 	{
 		GSOutput element;
 		
-		element.normal = mul(transpose(World),faceNormal );
-		element.normal = normalize(element.normal);
+		element.normal = faceNormal;
 
 	
 		element.pos = float4(mul(input[i].pos, transpose(World)).xyz, 1.0);

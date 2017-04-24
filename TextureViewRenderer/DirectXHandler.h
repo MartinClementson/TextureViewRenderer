@@ -8,14 +8,7 @@
 class DirectXHandler
 {
 private:
-	struct WVPConstantBuffer
-	{
-		DirectX::XMFLOAT4X4 World;
-		DirectX::XMFLOAT4X4 View;
-		DirectX::XMFLOAT4X4 Projection;
-		DirectX::XMFLOAT4X4 nWorld;
 
-	};
 	float clearColor[4] = { 1, 0, 0, 1 };
 	IDXGISwapChain*		 m_SwapChain	 = nullptr;
 	ID3D11Device*		 m_Device		 = nullptr;
@@ -27,10 +20,10 @@ private:
 	ID3D11Buffer*			m_wvpConstantBuffer = nullptr;
 	ID3D11Buffer*			m_lightConstBuffer  = nullptr;
 
-	WVPConstantBuffer m_wvpData;
+	ModelViewProjection m_wvpData;
 
 	
-
+	ID3D11RasterizerState*	  m_rasterizerState;
 	ID3D11DepthStencilView* m_depthStencilView = nullptr;
 	ID3D11Texture2D*		m_depthBuffer	   = nullptr;
 
@@ -62,7 +55,7 @@ private:
 	int CreateContext(HWND wndHandle);
 	int CreateShaders();
 	int CreateConstantBuffer();
-	void UpdateConstBuffer(WVPConstantBuffer* data);
+	void UpdateConstBuffer(ModelViewProjection* data);
 	void SetViewPort(float width, float height);
 };
 

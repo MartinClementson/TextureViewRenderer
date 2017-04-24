@@ -4,7 +4,7 @@
 
 DirectXHandler::DirectXHandler()
 {
-	DirectX::XMStoreFloat4x4(&this->m_wvpData.World,DirectX::XMMatrixIdentity());
+	DirectX::XMStoreFloat4x4(&this->m_wvpData.model,DirectX::XMMatrixIdentity());
 }
 
 
@@ -56,12 +56,14 @@ int DirectXHandler::Update(float dt)
 	UI::UIelements* elements = m_tweakbar->GetUiData();
 	DirectX::XMFLOAT3 newPos = DirectX::XMFLOAT3(0.0f, 0.0f, elements->cameraDistance);
 	m_cam.SetPosition(newPos);
-	m_wvpData.Projection = m_cam.GetProjectionMatrix();
-	m_wvpData.View		 = m_cam.GetViewMatrix();
+	m_wvpData.projection = m_cam.GetProjectionMatrix();
+	m_wvpData.view		 = m_cam.GetViewMatrix();
+	m_wvpData.model		 = m_models[elements->currentMesh]->GetTransformationMatrix();
 	UpdateConstBuffer(&m_wvpData);
 
 	ID3D11Buffer* vertBuff  = m_models[elements->currentMesh]->GetMeshData()->vertexBuffer;
 	ID3D11Buffer* indexBuff = m_models[elements->currentMesh]->GetMeshData()->indexBuffer;
+	
 	UINT32 vertexSize = sizeof(VertexData);
 	UINT32 offset = 0;
 	m_DeviceContext->IASetVertexBuffers(0, 1, &vertBuff, &vertexSize, &offset);
@@ -76,14 +78,16 @@ int DirectXHandler::Render(float dt)
 	m_DeviceContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH, 1, 0);
 
 
-	//m_DeviceContext->VSSetShader(m_VertexShader, nullptr, 0);
+	m_DeviceContext->VSSetShader(m_VertexShader, nullptr, 0);
 	//m_DeviceContext->HSSetShader(nullptr, nullptr, 0);
 	//m_DeviceContext->DSSetShader(nullptr, nullptr, 0);
-	//m_DeviceContext->GSSetShader(m_GeometryShader, nullptr, 0);
-	//m_DeviceContext->PSSetShader(m_PixelShader, nullptr, 0);
+	m_DeviceContext->GSSetShader(m_GeometryShader, nullptr, 0);
+	m_DeviceContext->PSSetShader(m_PixelShader, nullptr, 0);
 	//m_DeviceContext->PSSetShaderResources(0, 1, &m_TextureView);
 
+	m_DeviceContext->OMSetRenderTargets(1, &m_BackbufferRTV, m_depthStencilView);
 
+	m_DeviceContext->RSSetState(this->m_rasterizerState); //Set the rasterstate
 
 
 	//UINT32 vertexSize = sizeof(TriangleVertex);
@@ -93,8 +97,8 @@ int DirectXHandler::Render(float dt)
 	m_DeviceContext->IASetInputLayout(m_VertexLayout);
 	//
 	//
+	m_DeviceContext->GSSetConstantBuffers(1, 1, &m_wvpConstantBuffer);
 	m_DeviceContext->DrawIndexed(m_models[elements->currentMesh]->GetMeshData()->numIndices, 0, 0);
-	
 	this->m_tweakbar->Render();
 	m_SwapChain->Present(0, 0);
 	return 0;
@@ -113,7 +117,7 @@ int DirectXHandler::CreateContext(HWND wndHandle)
 	scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;       // use 32-bit color
 	scd.BufferUsage		  = DXGI_USAGE_RENDER_TARGET_OUTPUT;  // how swap chain is to be used
 	scd.OutputWindow	  = wndHandle;                        // the window to be used
-	scd.SampleDesc.Count  = 4;                                // how many multisamples
+	scd.SampleDesc.Count  = 1;                                // how many multisamples
 	scd.Windowed		  =	TRUE;                             // windowed/full-screen mode
 
 
@@ -121,7 +125,7 @@ int DirectXHandler::CreateContext(HWND wndHandle)
 	HRESULT hr = D3D11CreateDeviceAndSwapChain(NULL,
 		D3D_DRIVER_TYPE_HARDWARE,
 		NULL,
-		NULL,
+		D3D11_CREATE_DEVICE_DEBUG,
 		NULL,
 		NULL,
 		D3D11_SDK_VERSION,
@@ -135,12 +139,12 @@ int DirectXHandler::CreateContext(HWND wndHandle)
 		return 0;
 
 	D3D11_TEXTURE2D_DESC desc;
-	desc.Width			    = WINDOW_WIDTH;
-	desc.Height			    = WINDOW_HEIGHT;
+	desc.Width			    = (UINT)WINDOW_WIDTH;
+	desc.Height			    = (UINT)WINDOW_HEIGHT;
 	desc.MipLevels		    = 1;
 	desc.ArraySize		    = 1;
 	desc.Format			    = DXGI_FORMAT_D32_FLOAT;
-	desc.SampleDesc.Count   = 4;
+	desc.SampleDesc.Count   = 1;
 	desc.SampleDesc.Quality = 0;
 	desc.Usage				= D3D11_USAGE_DEFAULT;
 	desc.BindFlags			= D3D11_BIND_DEPTH_STENCIL;
@@ -156,16 +160,41 @@ int DirectXHandler::CreateContext(HWND wndHandle)
 		return 0;
 
 
+	
+
+		// Create the rasterizer state
+		D3D11_RASTERIZER_DESC rasterizerDesc;
+		ZeroMemory(&rasterizerDesc, sizeof(rasterizerDesc));
+
+		rasterizerDesc.AntialiasedLineEnable = false;
+		rasterizerDesc.CullMode = D3D11_CULL_NONE;//D3D11_CULL_BACK; //Enable backface culling
+		rasterizerDesc.DepthBias = 0;
+		rasterizerDesc.DepthBiasClamp = 0.0f;
+		rasterizerDesc.DepthClipEnable = false;
+		rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+		rasterizerDesc.FrontCounterClockwise = false;
+		rasterizerDesc.MultisampleEnable = false;
+		rasterizerDesc.ScissorEnable = false;
+		rasterizerDesc.SlopeScaledDepthBias = 0.0f;
+
+		hr = this->m_Device->CreateRasterizerState(&rasterizerDesc, &this->m_rasterizerState);
+		if (FAILED(hr))
+		{
+			return 0;
+		}
+
 		// get the address of the back buffer
 		ID3D11Texture2D* pBackBuffer = nullptr;
 		m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
 
 		// use the back buffer address to create the render target
 		m_Device->CreateRenderTargetView(pBackBuffer, NULL, &m_BackbufferRTV);
-		pBackBuffer->Release();
+		//pBackBuffer->Release();
 
 		// set the render target as the back buffer
 		m_DeviceContext->OMSetRenderTargets(1, &m_BackbufferRTV, m_depthStencilView);
+
+		m_DeviceContext->RSSetState(this->m_rasterizerState); //Set the rasterstate
 
 	
 	return 1;
@@ -258,7 +287,7 @@ int DirectXHandler::CreateConstantBuffer()
 	HRESULT hr;
 	//Gör en description av buffern
 	CD3D11_BUFFER_DESC bufferDesc;
-	bufferDesc.ByteWidth		   = sizeof(WVPConstantBuffer);
+	bufferDesc.ByteWidth		   = sizeof(ModelViewProjection);
 	bufferDesc.BindFlags		   = D3D11_BIND_CONSTANT_BUFFER; //detta är en konstant buffer
 	bufferDesc.Usage			   = D3D11_USAGE_DYNAMIC; //Read only from gpu, write from cpu
 	bufferDesc.CPUAccessFlags	   = D3D11_CPU_ACCESS_WRITE;  // vi måste förtydliga det.
@@ -271,7 +300,7 @@ int DirectXHandler::CreateConstantBuffer()
 
 	if (SUCCEEDED(hr)) {
 
-		m_DeviceContext->GSSetConstantBuffers(0, 1, &m_wvpConstantBuffer);
+		m_DeviceContext->GSSetConstantBuffers(1, 1, &m_wvpConstantBuffer);
 	}
 	else
 		return 0;
@@ -304,7 +333,7 @@ int DirectXHandler::CreateConstantBuffer()
 	return 1;
 }
 
-void DirectXHandler::UpdateConstBuffer(WVPConstantBuffer * data)
+void DirectXHandler::UpdateConstBuffer(ModelViewProjection * data)
 {
 	
 	D3D11_MAPPED_SUBRESOURCE mappedResourceWorld;
@@ -313,7 +342,7 @@ void DirectXHandler::UpdateConstBuffer(WVPConstantBuffer * data)
 	//mapping to the matrixbuffer
 	this->m_DeviceContext->Map(this->m_wvpConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResourceWorld);
 	
-	WVPConstantBuffer* temporaryWorld = (WVPConstantBuffer*)mappedResourceWorld.pData;
+	ModelViewProjection* temporaryWorld = (ModelViewProjection*)mappedResourceWorld.pData;
 
 	*temporaryWorld = *data;
 
