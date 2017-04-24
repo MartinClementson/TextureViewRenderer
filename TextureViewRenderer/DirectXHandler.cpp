@@ -43,6 +43,12 @@ int DirectXHandler::Initialize(HWND wndHandle)
 	this->m_DeviceContext->PSSetShader(m_PixelShader, nullptr, 0);
 	MeshDataHandler::GetInstance()->m_initialize(m_Device);
 	//m_DeviceContext->PSSetShaderResources(0, 1, &m_TextureView);
+
+	m_lightData.camPos = DirectX::XMFLOAT4(0.0f, 0.0f, 5.0f, 1.0f);
+	m_lightData.lightPos[0] = DirectX::XMFLOAT4(0.0f, 5.0f, 5.0f, 1.0f);
+	m_lightData.intensity[0] = 1.0f;
+	m_lightData.diffuseColor[0] = DirectX::XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f);
+	this->UpdateLightConstBuffer(&m_lightData);
 	Material hej;
 	for (size_t i = 0; i < NUM_MESH_TYPES; i++)
 	{
@@ -56,6 +62,8 @@ int DirectXHandler::Update(float dt)
 	UI::UIelements* elements = m_tweakbar->GetUiData();
 	DirectX::XMFLOAT3 newPos = DirectX::XMFLOAT3(0.0f, 0.0f, elements->cameraDistance);
 	m_cam.SetPosition(newPos);
+	m_lightData.camPos.z = elements->cameraDistance;
+	UpdateLightConstBuffer(&m_lightData);
 	m_wvpData.projection = m_cam.GetProjectionMatrix();
 	m_wvpData.view		 = m_cam.GetViewMatrix();
 
@@ -71,7 +79,7 @@ int DirectXHandler::Update(float dt)
 	}
 	//m_models[elements->currentMesh]->SetRotation()
 	m_wvpData.model		 = m_models[elements->currentMesh]->GetTransformationMatrix();
-	UpdateConstBuffer(&m_wvpData);
+	UpdateWVPConstBuffer(&m_wvpData);
 
 	ID3D11Buffer* vertBuff  = m_models[elements->currentMesh]->GetMeshData()->vertexBuffer;
 	ID3D11Buffer* indexBuff = m_models[elements->currentMesh]->GetMeshData()->indexBuffer;
@@ -322,30 +330,30 @@ int DirectXHandler::CreateConstantBuffer()
 
 
 	//Gör en description av buffern
-//CD3D11_BUFFER_DESC bufferDescL;
-//
-//
-//ZeroMemory(&bufferDescL, sizeof(bufferDescL));
-//
-//bufferDescL.ByteWidth = sizeof(lightBuffer);
-//bufferDescL.BindFlags = D3D11_BIND_CONSTANT_BUFFER; //detta är en konstant buffer
-//bufferDescL.Usage = D3D11_USAGE_DYNAMIC; //Read only from gpu, write from cpu
-//bufferDescL.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;  // vi måste förtydliga det.
-//bufferDescL.MiscFlags = 0;
-//bufferDescL.StructureByteStride = 0;
-//
-////Vi skapar buffern i device
-//
-//hr = gDevice->CreateBuffer(&bufferDescL, nullptr, &lightConstBuffer);
-//
-//if (SUCCEEDED(hr)) {
-//
-//	gDeviceContext->PSSetConstantBuffers(0, 1, &lightConstBuffer);
-//}
+	CD3D11_BUFFER_DESC bufferDescL;
+	
+	
+	ZeroMemory(&bufferDescL, sizeof(bufferDescL));
+	
+	bufferDescL.ByteWidth = sizeof(LightBuffer);
+	bufferDescL.BindFlags = D3D11_BIND_CONSTANT_BUFFER; //detta är en konstant buffer
+	bufferDescL.Usage = D3D11_USAGE_DYNAMIC; //Read only from gpu, write from cpu
+	bufferDescL.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;  // vi måste förtydliga det.
+	bufferDescL.MiscFlags = 0;
+	bufferDescL.StructureByteStride = 0;
+	
+	//Vi skapar buffern i device
+	
+	hr = m_Device->CreateBuffer(&bufferDescL, nullptr, &m_lightConstBuffer);
+	
+	if (SUCCEEDED(hr)) {
+	
+		m_DeviceContext->PSSetConstantBuffers(0, 1, &m_lightConstBuffer);
+	}
 	return 1;
 }
 
-void DirectXHandler::UpdateConstBuffer(ModelViewProjection * data)
+void DirectXHandler::UpdateWVPConstBuffer(ModelViewProjection * data)
 {
 	
 	D3D11_MAPPED_SUBRESOURCE mappedResourceWorld;
@@ -359,6 +367,20 @@ void DirectXHandler::UpdateConstBuffer(ModelViewProjection * data)
 	*temporaryWorld = *data;
 
 	this->m_DeviceContext->Unmap(m_wvpConstantBuffer, 0);
+}
+
+void DirectXHandler::UpdateLightConstBuffer(LightBuffer * data)
+{
+	D3D11_MAPPED_SUBRESOURCE mappedResourceWorld;
+	ZeroMemory(&mappedResourceWorld, sizeof(mappedResourceWorld));
+
+	//mapping to the matrixbuffer
+	this->m_DeviceContext->Map(this->m_lightConstBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResourceWorld);
+
+	LightBuffer* temporaryWorld = (LightBuffer*)mappedResourceWorld.pData;
+
+	*temporaryWorld = *data;
+	this->m_DeviceContext->Unmap(m_lightConstBuffer, 0);
 }
 
 void DirectXHandler::SetViewPort(float width, float height)

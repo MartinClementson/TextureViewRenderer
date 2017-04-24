@@ -1,10 +1,14 @@
-//cbuffer lightBuffer
-//{
-//	float4 lightPos;
-//	float4 diffuseColor;
-//	
-//	float intensity;
-//};
+#define NUM_LIGHTS 3
+
+cbuffer lightBuffer : register(b0)
+{
+	float4 lightPos[NUM_LIGHTS];
+	float4 diffuseColor[NUM_LIGHTS];
+	float  intensity[NUM_LIGHTS];
+
+	float4 camPos;
+};
+
 
 SamplerState SampleType; //modifies how the pixels are written to the polygon face when shaded
 //Texture2D shaderTexture;
@@ -22,17 +26,10 @@ struct PS_IN
 float4 PS_main(PS_IN input)  : SV_Target
 { 
 	float4 s = float4(0.0f,0.0f,1.0f,1.0f);
-
-	float4 lightPos		= { 0.0f,1.0f,2.0f,1.0f };
-	float4 diffuseColor = { 1.0f,1.0f,1.0f,1.0f };
-	float intensity = 1.0f;
-
-	
-	float4 camPos = { 0.0f,0.0f,5.0f,0.0f };
 	
 	//Ljusstrålen från pixelns position till ljuset.
 	//Normaliserat för att användas som en riktningsvektor
-	float3 vRay = normalize((float3)(lightPos - input.wPos));
+	float3 vRay = normalize((float3)(lightPos[0] - input.wPos));
 	
 	//Nu skapar vi en stråle från pixelns position till kameran.
 	float3 v = normalize(camPos.xyz - input.wPos.xyz).xyz;
@@ -48,15 +45,15 @@ float4 PS_main(PS_IN input)  : SV_Target
 	float3 ambient = { 0.1f, 0.1f, 0.1f }; //ambientLight
 	
 	 
-	float3 ks = diffuseColor.xyz; // Specular light färg
+	float3 ks = diffuseColor[0].xyz; // Specular light färg
 	float shinyPower = 20.0f;
-	float3 lightColor = mul(diffuseColor.xyz, intensity);
+	float3 lightColor = mul(diffuseColor[0].xyz, intensity[0]);
 	
 	//Beräknar specular lighten (som är väldigt cool)
 	float3 specularLight = { ks * pow(max(dot(r, v), 0.0), shinyPower) };
 	
 	//Multiplicera med lampans ljus (färg/intensitet)
-	specularLight = specularLight * lightColor;
+	specularLight = specularLight * lightColor[0] * fDot;
 	
 	//sampla från texturen.
 	//float3 s = shaderTexture.Sample(SampleType, input.Texture).xyz;
@@ -68,7 +65,7 @@ float4 PS_main(PS_IN input)  : SV_Target
 	//Texturen * skalärprodukten av ljus/normal
 	float3 diffuse = s.xyz  * fDot;
 	//Multiplicerat med ljusets färg/intensitet
-	diffuse = diffuse * lightColor;
+	diffuse = diffuse * lightColor[0];
 	ambient = (s.xyz * ambient); // vi multiplicerar ambienten med texturen också, så texturen syns korrekt
 	
 	float4 col = {(ambient + diffuse + specularLight)  , alpha };

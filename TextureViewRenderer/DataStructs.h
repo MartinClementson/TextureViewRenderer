@@ -17,6 +17,16 @@ struct ModelViewProjection
 	DirectX::XMFLOAT4X4 projection;
 };
 
+#define NUM_LIGHTS 3
+struct LightBuffer
+{
+	DirectX::XMFLOAT4 lightPos[NUM_LIGHTS];
+	DirectX::XMFLOAT4 diffuseColor[NUM_LIGHTS];
+	float intensity[NUM_LIGHTS];
+	float PADDING;
+	DirectX::XMFLOAT4 camPos;
+};
+
 // Used to send per-vertex data to the vertex shader.
 struct VertexData
 {

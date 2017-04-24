@@ -21,7 +21,7 @@ private:
 	ID3D11Buffer*			m_lightConstBuffer  = nullptr;
 
 	ModelViewProjection m_wvpData;
-
+	LightBuffer			m_lightData;
 	
 	ID3D11RasterizerState*	  m_rasterizerState;
 	ID3D11DepthStencilView* m_depthStencilView = nullptr;
@@ -57,7 +57,8 @@ private:
 	int CreateContext(HWND wndHandle);
 	int CreateShaders();
 	int CreateConstantBuffer();
-	void UpdateConstBuffer(ModelViewProjection* data);
+	void UpdateWVPConstBuffer(ModelViewProjection* data);
+	void UpdateLightConstBuffer(LightBuffer* data);
 	void SetViewPort(float width, float height);
 };
 
