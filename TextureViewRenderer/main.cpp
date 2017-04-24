@@ -14,7 +14,7 @@ HWND InitWindow(HINSTANCE hInstance)
 	if (!RegisterClassEx(&wcex))
 		return false;
 
-	RECT rc = { 0, 0, 640, 480 };
+	RECT rc = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
 	HWND handle = CreateWindow(
@@ -34,9 +34,9 @@ HWND InitWindow(HINSTANCE hInstance)
 }
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
+		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	{
 		DirectXHandler directX;
-		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 		MSG msg = { 0 };
 		HWND wndHandle = InitWindow(hInstance); //1. Skapa fönster
 		directX.Initialize(wndHandle);

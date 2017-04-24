@@ -2,40 +2,18 @@
 #include "pch.h"
 #include "TweakBar.h"
 using namespace UI;
-//LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-//{
-//
-//	if (TwEventWin(hWnd, message, wParam, lParam)) // send event message to AntTweakBar
-//		return 0; // event has been handled by AntTweakBar
-//	return 0;
-//}
+
 TweakBar::TweakBar()
 {
 }
-
-//void TW_CALL TweakBar::RotationCall(void * data)
-//{
-//	std::shared_ptr<UI::TweakBar> tweakBar = TweakBar::GetInstance();
-//	if (tweakBar->m_Uidata.rotate)
-//	{
-//		tweakBar->m_Uidata.rotate = false;
-//	}
-//	else {
-//		tweakBar->m_Uidata.rotate = true;
-//	}
-//}
-
 TweakBar::~TweakBar()
 {
 	TwTerminate();
-
 }
 
 UI::TweakBar* UI::TweakBar::GetInstance()
 {
 	static TweakBar instance;
-
-	
 	return &instance;
 }
 

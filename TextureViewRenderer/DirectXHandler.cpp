@@ -4,6 +4,7 @@
 
 DirectXHandler::DirectXHandler()
 {
+	DirectX::XMStoreFloat4x4(&this->m_wvpData.World,DirectX::XMMatrixIdentity());
 }
 
 
@@ -53,9 +54,11 @@ int DirectXHandler::Initialize(HWND wndHandle)
 int DirectXHandler::Update(float dt)
 {
 	UI::UIelements* elements = m_tweakbar->GetUiData();
-
+	DirectX::XMFLOAT3 newPos = DirectX::XMFLOAT3(0.0f, 0.0f, elements->cameraDistance);
+	m_cam.SetPosition(newPos);
 	m_wvpData.Projection = m_cam.GetProjectionMatrix();
 	m_wvpData.View		 = m_cam.GetViewMatrix();
+	UpdateConstBuffer(&m_wvpData);
 
 	ID3D11Buffer* vertBuff  = m_models[elements->currentMesh]->GetMeshData()->vertexBuffer;
 	ID3D11Buffer* indexBuff = m_models[elements->currentMesh]->GetMeshData()->indexBuffer;
@@ -303,6 +306,18 @@ int DirectXHandler::CreateConstantBuffer()
 
 void DirectXHandler::UpdateConstBuffer(WVPConstantBuffer * data)
 {
+	
+	D3D11_MAPPED_SUBRESOURCE mappedResourceWorld;
+	ZeroMemory(&mappedResourceWorld, sizeof(mappedResourceWorld));
+
+	//mapping to the matrixbuffer
+	this->m_DeviceContext->Map(this->m_wvpConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResourceWorld);
+	
+	WVPConstantBuffer* temporaryWorld = (WVPConstantBuffer*)mappedResourceWorld.pData;
+
+	*temporaryWorld = *data;
+
+	this->m_DeviceContext->Unmap(m_wvpConstantBuffer, 0);
 }
 
 void DirectXHandler::SetViewPort(float width, float height)
