@@ -118,8 +118,8 @@ int Camera::m_updateProjectionMatrix()
 {
 	DirectX::XMStoreFloat4x4(
 		&this->m_projectionMatrix,
-		DirectX::XMMatrixPerspectiveFovRH(this->m_FoV,
-			this->m_wHeight / this->m_wWidth,
+		DirectX::XMMatrixPerspectiveFovLH(this->m_FoV,
+			this->m_wWidth / this->m_wHeight,
 			this->m_nearPlane,
 			this->m_farPlane
 		)

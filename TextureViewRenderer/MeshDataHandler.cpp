@@ -1,4 +1,5 @@
 #include "MeshDataHandler.h"
+#include "ObjLoader.h"
 MeshDataHandler::MeshDataHandler()
 {
 }
@@ -61,6 +62,10 @@ int MeshDataHandler::m_initialize(ID3D11Device * gDevice)
 	//cubeVerts[5].position = Float3(0.5, 2.5,-0.5);     //5
 	//cubeVerts[6].position = Float3(-0.5,0.0,-0.5);     //6
 	//cubeVerts[7].position = Float3(-0.5,2.5,-0.5);     //7
+	
+	//ObjLoader objloader;
+	//VertexData * vdata;
+	//objloader.loadObj("meshes/stanford-bunny.obj", vdata);
 
 	const VertexData cubeData[] =
 	{

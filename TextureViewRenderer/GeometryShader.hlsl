@@ -46,11 +46,13 @@ void GS_main(
 		element.normal = normalize(element.normal);
 
 	
-		element.pos = mul(input[i].pos, transpose(World));
+		element.pos = float4(mul(input[i].pos, transpose(World)).xyz, 1.0);
 		element.wPos = element.pos;
 		element.pos = mul(element.pos, transpose(View));
 		element.pos = mul(element.pos, transpose(Projection));
 		element.Texture = input[i].Texture;
 		output.Append(element);
 	}
+
+	output.RestartStrip();
 }

@@ -4,7 +4,7 @@ class ObjLoader
 {
 public:
 	ObjLoader();
-	int loadObj(const char * path, VertexData &vData);
+	int loadObj(const char * path, VertexData *& vData);
 
 	~ObjLoader();
 };
