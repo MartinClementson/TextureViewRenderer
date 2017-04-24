@@ -2,6 +2,12 @@
 #include "DirectXHandler.h"
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
+void InitDosConsole() {
+	AllocConsole();
+	freopen("CONIN$", "rb", stdin);
+	freopen("CONOUT$", "wb", stdout);
+	freopen("CONOUT$", "wb", stderr);
+}
 
 HWND InitWindow(HINSTANCE hInstance)
 {
@@ -35,6 +41,7 @@ HWND InitWindow(HINSTANCE hInstance)
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
 		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+		InitDosConsole();
 	{
 		DirectXHandler directX;
 		MSG msg = { 0 };
