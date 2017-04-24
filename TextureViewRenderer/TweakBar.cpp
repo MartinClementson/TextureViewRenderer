@@ -26,7 +26,7 @@ int UI::TweakBar::Initialize(ID3D11Device * gDevice, float windowWidth, float wi
 
 	//TwAddButton(m_barHandle, "Rotation On/Off", TweakBar::RotationCall, NULL, "group = Mesh");
 	TwAddVarCB(m_barHandle, "Rotation", TW_TYPE_BOOLCPP, SetRotation, GetRotation, NULL, "group=Mesh key=r");
-	TwAddVarRW(m_barHandle, "Camera Distance", TW_TYPE_FLOAT, &m_Uidata.cameraDistance, "group = Camera step = 1.0 min =5.0");
+	TwAddVarRW(m_barHandle, "Camera Distance", TW_TYPE_FLOAT, &m_Uidata.cameraDistance, "group = Camera step = 1.0 min =2.0");
 	//TwAddButton(m_barHandle, "Bounce", BounceCall, NULL, "group = Rotation");
 	//TwAddVarRW(m_barHandle, "Rotation", TW_TYPE_FLOAT, &animSpeed, "step = 0.001 group = Rotation");
 	//TwAddVarRW(myBar, "Rotation Speed", TW_TYPE_FLOAT, &speed, "group = Rotation step = 0.000001 min =0");
