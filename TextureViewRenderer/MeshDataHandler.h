@@ -8,9 +8,9 @@ public:
 	{
 		MeshType type;
 		VertexData * vertexData;
-		unsigned short * indexData;
-		unsigned short numVertices;
-		unsigned short numIndices;
+		unsigned int * indexData;
+		unsigned int numVertices;
+		unsigned int numIndices;
 
 		ID3D11Buffer * vertexBuffer;
 		ID3D11Buffer * indexBuffer;
