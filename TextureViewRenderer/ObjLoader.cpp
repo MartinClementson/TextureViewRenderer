@@ -6,7 +6,7 @@ ObjLoader::ObjLoader()
 {
 }
 
-int ObjLoader::loadObj(const char * path, VertexData *& vData)
+int ObjLoader::loadObj(const char * path, VertexData *& vData, unsigned int *& iData, unsigned int &vCount, unsigned int &iCount)
 {
 	FILE * file = fopen(path, "r");
 	if (file == NULL) {
@@ -23,6 +23,15 @@ int ObjLoader::loadObj(const char * path, VertexData *& vData)
 	std::vector< DirectX::XMFLOAT3 > out_vertices;
 	std::vector< DirectX::XMFLOAT2 > out_uvs;
 	std::vector< DirectX::XMFLOAT3 > out_normals;
+
+	vertexIndices.reserve(25000); uvIndices.reserve(25000); normalIndices.reserve(25000);
+
+	temp_vertices.reserve(25000000);
+	temp_uvs.reserve(25000000);
+	temp_normals.reserve(25000000);
+	out_vertices.reserve(25000000);
+	out_uvs.reserve(25000000);
+	out_normals.reserve(25000000);
 
 	while (1) {
 
@@ -64,28 +73,42 @@ int ObjLoader::loadObj(const char * path, VertexData *& vData)
 			normalIndices.push_back(normalIndex[1]);
 			normalIndices.push_back(normalIndex[2]);
 
-			// For each vertex of each triangle
-			for (unsigned int i = 0; i < vertexIndices.size(); i++) {
-				unsigned int vertexIndex = vertexIndices[i];
-				DirectX::XMFLOAT3 vertex = temp_vertices[vertexIndex - 1];
-				out_vertices.push_back(vertex);
-			}
-			for (unsigned int i = 0; i < uvIndices.size(); i++) {
-				unsigned int uvIndex = uvIndices[i];
-				DirectX::XMFLOAT2 uv = temp_uvs[uvIndex - 1];
-				out_uvs.push_back(uv);
-			}
-			for (unsigned int i = 0; i < normalIndices.size(); i++) {
-				unsigned int normalIndex = normalIndices[i];
-				DirectX::XMFLOAT3 normal = temp_vertices[normalIndex - 1];
-				out_normals.push_back(normal);
-			}
+
 		}
 	}
 
+	// For each vertex of each triangle
+	for (unsigned int i = 0; i < vertexIndices.size(); i++) {
+		unsigned int vertexIndex = vertexIndices[i];
+		DirectX::XMFLOAT3 vertex = temp_vertices[vertexIndex - 1];
+		out_vertices.push_back(vertex);
+	}
+	for (unsigned int i = 0; i < uvIndices.size(); i++) {
+		unsigned int uvIndex = uvIndices[i];
+		DirectX::XMFLOAT2 uv = temp_uvs[uvIndex - 1];
+		out_uvs.push_back(uv);
+	}
+	for (unsigned int i = 0; i < normalIndices.size(); i++) {
+		unsigned int normalIndex = normalIndices[i];
+		DirectX::XMFLOAT3 normal = temp_normals[normalIndex - 1];
+		out_normals.push_back(normal);
+	}
+
+
+	vData = new VertexData[vertexIndices.size()];
+	iData = new unsigned int[vertexIndices.size()];
+	vCount = vertexIndices.size();
+	iCount = vCount;
+	for (unsigned int i = 0; i < vertexIndices.size(); i++)
+	{
+		vData[i].pos = out_vertices[i];
+		vData[i].normal = out_normals[i];
+		vData[i].UV = out_uvs[i];
+		iData[i] = i;
+	}
 	printf("hej");
 
-	return 0;
+	return 1;
 }
 
 

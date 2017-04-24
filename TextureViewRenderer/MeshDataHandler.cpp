@@ -63,9 +63,11 @@ int MeshDataHandler::m_initialize(ID3D11Device * gDevice)
 	//cubeVerts[6].position = Float3(-0.5,0.0,-0.5);     //6
 	//cubeVerts[7].position = Float3(-0.5,2.5,-0.5);     //7
 	
-	//ObjLoader objloader;
-	//VertexData * vdata;
-	//objloader.loadObj("meshes/stanford-bunny.obj", vdata);
+	ObjLoader objloader;
+	VertexData * vdata; 
+	unsigned int * idata;
+	unsigned int cvCount, ciCount;
+	objloader.loadObj("meshes/stanford-bunny.obj", vdata, idata, cvCount, ciCount);
 
 	const VertexData cubeData[] =
 	{
@@ -106,11 +108,11 @@ int MeshDataHandler::m_initialize(ID3D11Device * gDevice)
 
 	m_meshData[PLANE].vertexData = new VertexData[arraysize(planeData)];
 	m_meshData[CUBE].vertexData = new VertexData[arraysize(cubeData)];
-	m_meshData[COMPLEX].vertexData = new VertexData[arraysize(complexData)];
+	m_meshData[COMPLEX].vertexData = vdata;
 
 	m_meshData[PLANE].indexData = new unsigned int[arraysize(planeIndices)];
 	m_meshData[CUBE].indexData = new unsigned int[arraysize(cubeIndices)];
-	m_meshData[COMPLEX].indexData = new unsigned int[arraysize(complexIndices)];
+	m_meshData[COMPLEX].indexData = idata;
 
 	for (int i = 0; i < arraysize(planeData); i++)
 	{
@@ -120,10 +122,7 @@ int MeshDataHandler::m_initialize(ID3D11Device * gDevice)
 	{
 		m_meshData[CUBE].vertexData[i] = cubeData[i];
 	}
-	for (int i = 0; i < arraysize(complexData); i++)
-	{
-		m_meshData[COMPLEX].vertexData[i] = complexData[i];
-	}
+
 
 	for (int i = 0; i < arraysize(planeIndices); i++)
 	{
@@ -135,18 +134,14 @@ int MeshDataHandler::m_initialize(ID3D11Device * gDevice)
 		m_meshData[CUBE].indexData[i] = cubeIndices[i];
 	}
 
-	for (int i = 0; i < arraysize(complexIndices); i++)
-	{
-		m_meshData[COMPLEX].indexData[i] = complexIndices[i];
-	}
 
 	m_meshData[PLANE].numVertices = arraysize(planeData);
 	m_meshData[CUBE].numVertices = arraysize(cubeData);
-	m_meshData[COMPLEX].numVertices = arraysize(complexData);
+	m_meshData[COMPLEX].numVertices = cvCount;
 
 	m_meshData[PLANE].numIndices = arraysize(planeIndices);
 	m_meshData[CUBE].numIndices = arraysize(cubeIndices);
-	m_meshData[COMPLEX].numIndices = arraysize(complexIndices);
+	m_meshData[COMPLEX].numIndices = ciCount;
 
 	for (int i = 0; i < NUM_MESH_TYPES; i++)
 	{
