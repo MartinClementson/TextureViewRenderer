@@ -25,6 +25,7 @@ struct LightBuffer
 	float intensity[NUM_LIGHTS];
 	float PADDING;
 	DirectX::XMFLOAT4 camPos;
+	float asdsadsa[16];
 };
 
 // Used to send per-vertex data to the vertex shader.

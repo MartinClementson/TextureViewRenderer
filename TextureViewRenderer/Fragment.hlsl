@@ -10,7 +10,7 @@ cbuffer lightBuffer : register(b0)
 };
 
 
-SamplerState SampleType; //modifies how the pixels are written to the polygon face when shaded
+SamplerState SampleType :register(s0); //modifies how the pixels are written to the polygon face when shaded
 Texture2D shaderTexture :register(t0);
 
 
