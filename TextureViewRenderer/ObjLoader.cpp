@@ -6,7 +6,7 @@ ObjLoader::ObjLoader()
 {
 }
 
-int ObjLoader::loadObj(const char * path, VertexData *& vData, unsigned int *& iData, unsigned int &vCount, unsigned int &iCount)
+int ObjLoader::loadObj(const char * path, VertexData *& vData, unsigned int *& iData, unsigned int &vCount, unsigned int &iCount, float scale, bool openGL)
 {
 	FILE * file = fopen(path, "r");
 	if (file == NULL) {
@@ -101,12 +101,28 @@ int ObjLoader::loadObj(const char * path, VertexData *& vData, unsigned int *& i
 	iCount = vCount;
 	for (unsigned int i = 0; i < vertexIndices.size(); i++)
 	{
-		vData[i].pos = out_vertices[i];
+		DirectX::XMStoreFloat3(&vData[i].pos, DirectX::XMVectorScale(DirectX::XMLoadFloat3(&out_vertices[i]), scale));
 		vData[i].normal = out_normals[i];
 		vData[i].UV = out_uvs[i];
+		if (openGL)
+		{
+			vData[i].pos.z *= -1.0;
+			vData[i].normal.z *= -1.0;
+			vData[i].UV.x = vData[i].UV.x - 1.0;
+		}
+
 		iData[i] = i;
 	}
-	printf("hej");
+
+	if (openGL)
+	{
+		for (size_t i = 2; i < vertexIndices.size(); i += 3)
+		{ 
+			unsigned int temp = iData[i];
+			iData[i] = iData[i - 1];
+			iData[i - 1] = temp;
+		}
+	}
 
 	return 1;
 }

@@ -26,4 +26,5 @@ private:
 	template <typename T, unsigned S>
 	inline unsigned arraysize(const T(&v)[S]) { return S; }
 	MeshDataHandler();
+	int m_calcNormals(VertexData *& vData);
 };

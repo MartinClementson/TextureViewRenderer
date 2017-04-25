@@ -40,9 +40,9 @@ void GS_main(
 		GSOutput element;
 		
 		element.normal = faceNormal;
-		element.normal = input[i].normal;
+		element.normal = mul(float4(input[i].normal, 0.0), transpose(World));
 	
-		element.pos = float4(mul(input[i].pos, transpose(World)).xyz, 1.0);
+		element.pos = mul(input[i].pos, transpose(World));
 		element.wPos = element.pos;
 		element.pos = mul(element.pos, transpose(View));
 		element.pos = mul(element.pos, transpose(Projection));
