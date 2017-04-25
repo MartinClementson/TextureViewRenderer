@@ -11,7 +11,6 @@ DirectXHandler::DirectXHandler()
 DirectXHandler::~DirectXHandler()
 {
 	m_VertexBuffer		!= nullptr ? m_VertexBuffer		->Release(): NULL;
-	m_TextureView		!= nullptr ? m_TextureView		->Release(): NULL;
 	m_VertexLayout		!= nullptr ? m_VertexLayout	    ->Release(): NULL;
 	m_VertexShader		!= nullptr ? m_VertexShader		->Release(): NULL;
 	m_PixelShader		!= nullptr ? m_PixelShader	    ->Release(): NULL;
@@ -30,6 +29,7 @@ DirectXHandler::~DirectXHandler()
 
 int DirectXHandler::Initialize(HWND wndHandle)
 {
+	CoInitialize((LPVOID)0); //initialize texture loader
 	assert(CreateContext(wndHandle) == 1);
 	SetViewPort(WINDOW_WIDTH, WINDOW_HEIGHT);
 	this->m_tweakbar = UI::TweakBar::GetInstance();
@@ -49,10 +49,24 @@ int DirectXHandler::Initialize(HWND wndHandle)
 	m_lightData.intensity[0] = 1.0f;
 	m_lightData.diffuseColor[0] = DirectX::XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f);
 	this->UpdateLightConstBuffer(&m_lightData);
-	Material hej;
+	
+	Material materials[NUM_MESH_TYPES];
+
+		std::string texturePath = "test.tif";
+			//append the file name to the directory
+	size_t length = strlen(texturePath.c_str());
+	wchar_t path[256];
+	mbstowcs_s(&length, path, texturePath.c_str(), length);
+	
+	HRESULT hr = DirectX::CreateWICTextureFromFile(m_Device, path, &materials[0].textureResource, &materials[0].m_TextureView);
+	if (FAILED(hr))
+	{
+		printf("FAILED Loading texture");
+	}
+	m_DeviceContext->PSSetShaderResources(0, 1, &materials[0].m_TextureView);
 	for (size_t i = 0; i < NUM_MESH_TYPES; i++)
 	{
-		m_models[i] = new Model(m_Device, MeshDataHandler::GetInstance()->GetMeshData(MeshType(i)),&hej);
+		m_models[i] = new Model(m_Device, MeshDataHandler::GetInstance()->GetMeshData(MeshType(i)),&materials[i]);
 	}
 	return 0;
 }
@@ -70,7 +84,7 @@ int DirectXHandler::Update(float dt)
 	if (elements->rotate)
 	{
 		DirectX::XMFLOAT4X4 rotMatrix;
-		m_rotationValue += 0.001;
+		m_rotationValue += 0.001f;
 		if (m_rotationValue >= 360)
 			m_rotationValue = 0;
 		DirectX::XMStoreFloat4x4(&rotMatrix, DirectX::XMMatrixRotationY(m_rotationValue));
