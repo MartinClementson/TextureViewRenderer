@@ -11,6 +11,7 @@ struct GSInput
 	float4 pos :POSITION;
 	float2 Texture : TEXCOORD0;
 	float3 normal: NORMAL;
+	float3 tangent : TANGENT;
 };
 
 struct GSOutput
@@ -19,7 +20,16 @@ struct GSOutput
 	float2 Texture : TEXCOORD0;
 	float3 normal : NORMAL;
 	float4 wPos : WORLDPOS;
+	float3x3 TBN : TANGENTMATRIX;
 };
+
+float3x3 TBN(float3 normal, float3 tangent) 
+{
+	tangent -= dot(tangent, normal) * normal;
+	float3 B = -cross(normal, tangent); //Bitangent
+
+	return float3x3(tangent, B, normal); //return tangent space matrix
+}
 
 
 [maxvertexcount(3)]
@@ -30,23 +40,24 @@ void GS_main(
 )
 {
 	//GSOutput element;
-	float3 faceEdgeA = input[1].pos - input[0].pos;
-	float3 faceEdgeB = input[2].pos - input[0].pos;
-	float3 faceNormal = normalize(cross(faceEdgeA, faceEdgeB));
-	faceNormal = mul(transpose(World), faceNormal);
-	faceNormal = normalize(faceNormal);
+	//float3 faceEdgeA = input[1].pos - input[0].pos;
+	//float3 faceEdgeB = input[2].pos - input[0].pos;
+	//float3 faceNormal = normalize(cross(faceEdgeA, faceEdgeB));
+	//faceNormal = mul(transpose(World), faceNormal);
+	//faceNormal = normalize(faceNormal);
 	for (uint i = 0; i < 3; i++)
 	{
 		GSOutput element;
 		
-		element.normal = faceNormal;
-		element.normal = mul(float4(input[i].normal, 0.0), transpose(World));
+		element.normal = float3(mul(float4(input[i].normal, 0.0), transpose(World)).xyz);
 	
-		element.pos = mul(input[i].pos, transpose(World));
+		element.pos = float4(mul(input[i].pos, transpose(World)).xyz, 1.0);
 		element.wPos = element.pos;
 		element.pos = mul(element.pos, transpose(View));
 		element.pos = mul(element.pos, transpose(Projection));
 		element.Texture = input[i].Texture;
+		element.TBN = TBN(element.normal, float3(mul(float4(input[i].tangent, 0.0), transpose(World)).xyz));
+
 		output.Append(element);
 	}
 

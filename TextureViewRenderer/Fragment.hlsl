@@ -20,6 +20,7 @@ struct PS_IN
 	float2 Texture : TEXCOORD0;
 	float3 Normal : NORMAL;
 	float4 wPos :  WORLDPOS;
+	float3x3 TBN : TANGENTMATRIX;
 };
 
 
@@ -71,6 +72,6 @@ float4 PS_main(PS_IN input)  : SV_Target
 	float4 col = {(ambient + diffuse + specularLight)  , alpha };
 	
 	
-	
+	return float4(input.TBN._m00_m01_m02, 1.0);
 	return col;
 };
