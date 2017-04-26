@@ -23,9 +23,57 @@ struct PS_IN
 	float3x3 TBN : TANGENTMATRIX;
 };
 
+float MipLevel(float2 uv, float texture_width, float texture_height, int mipCount)
+{
+	float2 dx = ddx(uv * texture_width);
+	float2 dy = ddy(uv * texture_height);
+	float d = max(dot(dx, dx), dot(dy, dy));
+
+	// Clamp the value to the max mip level counts
+	const float rangeClamp = pow(2.0, (mipCount - 1) * 2.0);
+	d = clamp(d, 1.0, rangeClamp);
+
+	float mipLevel = 0.5 * log2(d);
+	//mipLevel = floor(mipLevel); uncomment to get integer value of the closest level
+
+	return mipLevel;
+}
+
+float3 quantize(float3 color, int precision)
+{
+	float tPrecision = (8.0 * precision) - 1;
+	float3 tColor = color;
+
+	for (int i = 0; i < 3; i++)
+	{
+		//float b = floor(f == 1.0 ? tPrecision : f * tPrecision - 1.0);
+
+		float b = floor(tPrecision * tColor[i]);
+		
+		tColor[i] = b / tPrecision;
+		//b = floor(f2 == 1.0 ? 255 : f2 * 256.0)
+	}
+
+	return tColor;
+}
 
 float4 PS_main(PS_IN input)  : SV_Target
 { 
+
+	float texture_height = 0.0f, texture_width = 0.0f, elements = 0.0f,mipLevels = 0.0f;
+	shaderTexture.GetDimensions(0, texture_width, texture_height, mipLevels);
+	
+	float mipLevel = MipLevel(input.Texture, texture_width, texture_height, mipLevels);
+
+	float rangedMip;
+	float oldrange = (mipLevels - 1);
+
+	rangedMip = (((mipLevel - 1.0f) * 1.0f) / (mipLevels - 1.0f)) + 0;
+	//rangedMip *= -1.0f;
+
+	float4 mipVisualizer = float4(rangedMip, rangedMip, rangedMip, 1.0f);
+
+
 	//float4 s = float4(0.0f,0.0f,1.0f,1.0f);
 	
 	//Ljusstrålen från pixelns position till ljuset.
@@ -73,5 +121,6 @@ float4 PS_main(PS_IN input)  : SV_Target
 	
 	
 	//return float4(input.TBN._m00_m01_m02, 1.0);
+	return mipVisualizer;
 	return col;
 };
