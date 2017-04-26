@@ -23,9 +23,51 @@ struct PS_IN
 	float3x3 TBN : TANGENTMATRIX;
 };
 
+float MipLevel(float2 uv, float texture_width, float texture_height, int mipCount)
+{
+	float2 dx = ddx(uv * texture_width);
+	float2 dy = ddy(uv * texture_height);
+	float d = max(dot(dx, dx), dot(dy, dy));
+
+	// Clamp the value to the max mip level counts
+	const float rangeClamp = pow(2.0, (mipCount - 1) * 2.0);
+	d = clamp(d, 1.0, rangeClamp);
+
+	float mipLevel = 0.5 * log2(d);
+	//mipLevel = floor(mipLevel); uncomment to get integer value of the closest level
+
+	return mipLevel;
+}
+
+float3 quantize(float3 color, int precision)
+{
+	int tPrecision = ((8 * precision)/3) - 1;
+	float3 tColor = color;
+
+	tColor.x = floor(tPrecision * tColor.x) / tPrecision;
+	tColor.y = floor(tPrecision * tColor.y) / tPrecision;
+	tColor.z = floor(tPrecision * tColor.z) / tPrecision;
+
+	return tColor;
+}
 
 float4 PS_main(PS_IN input)  : SV_Target
 { 
+
+	float texture_height = 0.0f, texture_width = 0.0f, elements = 0.0f,mipLevels = 0.0f;
+	shaderTexture.GetDimensions(0, texture_width, texture_height, mipLevels);
+	
+	float mipLevel = MipLevel(input.Texture, texture_width, texture_height, mipLevels);
+
+	float rangedMip;
+	float oldrange = (mipLevels - 1);
+
+	rangedMip = (((mipLevel - 1.0f) * 1.0f) / (mipLevels - 1.0f)) + 0;
+	//rangedMip *= -1.0f;
+
+	float4 mipVisualizer = float4(rangedMip, rangedMip, rangedMip, 1.0f);
+
+
 	//float4 s = float4(0.0f,0.0f,1.0f,1.0f);
 	
 	//Ljusstrålen från pixelns position till ljuset.
@@ -69,9 +111,13 @@ float4 PS_main(PS_IN input)  : SV_Target
 	diffuse = diffuse * lightColor[0];
 	ambient = (s.xyz * ambient); // vi multiplicerar ambienten med texturen också, så texturen syns korrekt
 	
-	float4 col = {(ambient + diffuse + specularLight)  , alpha };
-	
+	float3 finalColor = ambient + diffuse + specularLight;
+
+	float4 col = {(ambient + diffuse + specularLight), alpha };
+	finalColor = quantize(finalColor, 32);
 	
 	//return float4(input.TBN._m00_m01_m02, 1.0); printing tangent
+	//return mipVisualizer;
+	//return float4(finalColor, 1.0);
 	return col;
 };

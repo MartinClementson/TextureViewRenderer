@@ -58,8 +58,8 @@ int DirectXHandler::Initialize(HWND wndHandle)
 	size_t length = strlen(texturePath.c_str());
 	wchar_t path[256];
 	mbstowcs_s(&length, path, texturePath.c_str(), length);
-	
-	HRESULT hr = DirectX::CreateWICTextureFromFile(m_Device, path, &materials[0].textureResource, &materials[0].m_TextureView);
+
+	HRESULT hr = DirectX::CreateWICTextureFromFile(m_Device, m_DeviceContext, path, &materials[0].textureResource, &materials[0].m_TextureView);
 	if (FAILED(hr))
 	{
 		printf("FAILED Loading texture");
