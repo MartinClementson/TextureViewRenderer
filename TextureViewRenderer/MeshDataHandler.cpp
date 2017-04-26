@@ -27,21 +27,21 @@ int MeshDataHandler::m_initialize(ID3D11Device * gDevice)
 	//	1,6,4
 	//};
 
-	const unsigned int planeIndices[] =
-	{
-		0,1,2,
-		0,2,3,
-		3,2,4,
-		3,4,5,
-		5,4,6,
-		5,6,7,
-		7,6,1,
-		7,1,0,
-		0,3,5,
-		0,5,7,
-		1,4,2,
-		1,6,4
-	};
+	//const unsigned int planeIndices[] =
+	//{
+	//	0,1,2,
+	//	0,2,3,
+	//	3,2,4,
+	//	3,4,5,
+	//	5,4,6,
+	//	5,6,7,
+	//	7,6,1,
+	//	7,1,0,
+	//	0,3,5,
+	//	0,5,7,
+	//	1,4,2,
+	//	1,6,4
+	//};
 
 
 	//cubeVerts[0].position = Float3(-0.5, 2.5,0.5);     //0
@@ -72,7 +72,13 @@ int MeshDataHandler::m_initialize(ID3D11Device * gDevice)
 	m_meshData[CUBE].indexData = cubeIndices;
 	m_meshData[CUBE].vertexData = cubeData;
 
-
+	VertexData * planeData;
+	unsigned int * planeIndices;
+	objloader.loadObj("meshes/plane.obj", planeData, planeIndices, cvCount, ciCount);
+	m_meshData[PLANE].numVertices = cvCount;
+	m_meshData[PLANE].numIndices = ciCount;
+	m_meshData[PLANE].indexData = planeIndices;
+	m_meshData[PLANE].vertexData = planeData;
 	//const VertexData cubeData[] =
 	//{
 	//	{ DirectX::XMFLOAT3(-0.5, 2.5,0.5),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f) },
@@ -87,17 +93,17 @@ int MeshDataHandler::m_initialize(ID3D11Device * gDevice)
 
 
 
-	const VertexData planeData[] =
-	{
-		{ DirectX::XMFLOAT3(-0.5, .5,0.5),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(-0.5, -.5,0.5),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.5, -.5, 0.5),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(0.5, .5, 0.5),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 1.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.5, -.5,-0.5), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 0.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(0.5, .5,-0.5), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 0.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(-0.5,-.5,-0.5), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 1.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(-0.5,.5,-0.5), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f) },
-	};
+	//const VertexData planeData[] =
+	//{
+	//	{ DirectX::XMFLOAT3(-0.5, .5,0.5),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f) },
+	//	{ DirectX::XMFLOAT3(-0.5, -.5,0.5),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f) },
+	//	{ DirectX::XMFLOAT3(0.5, -.5, 0.5),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f) },
+	//	{ DirectX::XMFLOAT3(0.5, .5, 0.5),DirectX::XMFLOAT2(0.0f,0.0f), DirectX::XMFLOAT3(0.0f, 1.0f, 1.0f) },
+	//	{ DirectX::XMFLOAT3(0.5, -.5,-0.5), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 0.0f, 0.0f) },
+	//	{ DirectX::XMFLOAT3(0.5, .5,-0.5), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 0.0f, 1.0f) },
+	//	{ DirectX::XMFLOAT3(-0.5,-.5,-0.5), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 1.0f, 0.0f) },
+	//	{ DirectX::XMFLOAT3(-0.5,.5,-0.5), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f) },
+	//};
 
 
 	//const VertexData complexData[] =
@@ -112,28 +118,28 @@ int MeshDataHandler::m_initialize(ID3D11Device * gDevice)
 	//	{ DirectX::XMFLOAT3(-0.5,2.5,-0.5), DirectX::XMFLOAT2(0.0f,0.0f),DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f) },
 	//};
 
-	m_meshData[PLANE].vertexData = new VertexData[arraysize(planeData)];
+	//m_meshData[PLANE].vertexData = new VertexData[arraysize(planeData)];
 	//m_meshData[CUBE].vertexData = new VertexData[arraysize(cubeData)];
 	
 
-	m_meshData[PLANE].indexData = new unsigned int[arraysize(planeIndices)];
+	//m_meshData[PLANE].indexData = new unsigned int[arraysize(planeIndices)];
 	//m_meshData[CUBE].indexData = new unsigned int[arraysize(cubeIndices)];
 	
 
-	for (int i = 0; i < arraysize(planeData); i++)
-	{
-		m_meshData[PLANE].vertexData[i] = planeData[i];
-	}
+	//for (int i = 0; i < arraysize(planeData); i++)
+	//{
+	//	m_meshData[PLANE].vertexData[i] = planeData[i];
+	//}
 	//for (int i = 0; i < arraysize(cubeData); i++)
 	//{
 	//	m_meshData[CUBE].vertexData[i] = cubeData[i];
 	//}
 
 
-	for (int i = 0; i < arraysize(planeIndices); i++)
-	{
-		m_meshData[PLANE].indexData[i] = planeIndices[i];
-	}
+	//for (int i = 0; i < arraysize(planeIndices); i++)
+	//{
+	//	m_meshData[PLANE].indexData[i] = planeIndices[i];
+	//}
 
 	//for (int i = 0; i < arraysize(cubeIndices); i++)
 	//{
@@ -141,11 +147,11 @@ int MeshDataHandler::m_initialize(ID3D11Device * gDevice)
 	//}
 
 
-	m_meshData[PLANE].numVertices = arraysize(planeData);
+	//m_meshData[PLANE].numVertices = arraysize(planeData);
 	//m_meshData[CUBE].numVertices = arraysize(cubeData);
 	
 
-	m_meshData[PLANE].numIndices = arraysize(planeIndices);
+	//m_meshData[PLANE].numIndices = arraysize(planeIndices);
 	//m_meshData[CUBE].numIndices = arraysize(cubeIndices);
 	
 

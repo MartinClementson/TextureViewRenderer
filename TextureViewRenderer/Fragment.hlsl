@@ -72,6 +72,6 @@ float4 PS_main(PS_IN input)  : SV_Target
 	float4 col = {(ambient + diffuse + specularLight)  , alpha };
 	
 	
-	return float4(input.TBN._m00_m01_m02, 1.0);
+	//return float4(input.TBN._m00_m01_m02, 1.0);
 	return col;
 };
