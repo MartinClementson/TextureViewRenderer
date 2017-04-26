@@ -153,6 +153,7 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ObjLoader.cpp" />
     <ClCompile Include="TweakBar.cpp" />
+    <ClCompile Include="WICTextureLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -164,6 +165,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="tiny_obj_loader.h" />
     <ClInclude Include="TweakBar.h" />
+    <ClInclude Include="WICTextureLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Fragment.hlsl">

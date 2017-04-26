@@ -3,7 +3,7 @@
 #include "TweakBar.h"
 #include "Model.h"
 #include "Camera.h"
-
+#include "WICTextureLoader.h"
 
 class DirectXHandler
 {
@@ -32,11 +32,12 @@ private:
 	ID3D11VertexShader*   m_VertexShader	 = nullptr;
 	ID3D11GeometryShader* m_GeometryShader   = nullptr;
 	ID3D11PixelShader*	  m_PixelShader		 = nullptr;
-
+	//SamplerState
+	ID3D11SamplerState* m_SampleState = nullptr;
 
 	//Textures
 	ID3D11Texture2D			 *m_Texture		= nullptr;
-	ID3D11ShaderResourceView *m_TextureView = nullptr;
+	//ID3D11ShaderResourceView *m_TextureView = nullptr;
 	UI::TweakBar* m_tweakbar;
 
 

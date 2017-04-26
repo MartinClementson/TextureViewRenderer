@@ -25,6 +25,7 @@ struct LightBuffer
 	float intensity[NUM_LIGHTS];
 	float PADDING;
 	DirectX::XMFLOAT4 camPos;
+	float asdsadsa[16];
 };
 
 // Used to send per-vertex data to the vertex shader.
@@ -39,5 +40,13 @@ struct VertexData
 struct Material
 {
 	std::string texturePath;
+	ID3D11ShaderResourceView *m_TextureView = nullptr;
+	ID3D11Resource*			textureResource = nullptr;
+	Material() {};
+	~Material()
+	{
+		m_TextureView   != nullptr ? m_TextureView->Release()   : NULL;
+		textureResource != nullptr ? textureResource->Release() : NULL;
+	}
 };
 

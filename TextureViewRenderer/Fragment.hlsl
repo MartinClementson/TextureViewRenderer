@@ -5,13 +5,13 @@ cbuffer lightBuffer : register(b0)
 	float4 lightPos[NUM_LIGHTS];
 	float4 diffuseColor[NUM_LIGHTS];
 	float  intensity[NUM_LIGHTS];
-
+	float padding;
 	float4 camPos;
 };
 
 
-SamplerState SampleType; //modifies how the pixels are written to the polygon face when shaded
-//Texture2D shaderTexture;
+SamplerState SampleType :register(s0); //modifies how the pixels are written to the polygon face when shaded
+Texture2D shaderTexture :register(t0);
 
 
 struct PS_IN
@@ -26,7 +26,7 @@ struct PS_IN
 
 float4 PS_main(PS_IN input)  : SV_Target
 { 
-	float4 s = float4(0.0f,0.0f,1.0f,1.0f);
+	//float4 s = float4(0.0f,0.0f,1.0f,1.0f);
 	
 	//Ljusstrålen från pixelns position till ljuset.
 	//Normaliserat för att användas som en riktningsvektor
@@ -57,7 +57,7 @@ float4 PS_main(PS_IN input)  : SV_Target
 	specularLight = specularLight * lightColor[0] * fDot;
 	
 	//sampla från texturen.
-	//float3 s = shaderTexture.Sample(SampleType, input.Texture).xyz;
+	float3 s = shaderTexture.Sample(SampleType, input.Texture).xyz;
 	
 	//Alpha, funkar inte nu, för jag har inte "aktiverat" att hantera alpha i cpun
 	float alpha = 1.0f;
