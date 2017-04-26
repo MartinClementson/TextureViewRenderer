@@ -44,11 +44,9 @@ float3 quantize(float3 color, int precision)
 	int tPrecision = ((8 * precision)/3) - 1;
 	float3 tColor = color;
 
-		
 	tColor.x = floor(tPrecision * tColor.x) / tPrecision;
 	tColor.y = floor(tPrecision * tColor.y) / tPrecision;
 	tColor.z = floor(tPrecision * tColor.z) / tPrecision;
-		//b = floor(f2 == 1.0 ? 255 : f2 * 256.0)
 
 	return tColor;
 }
