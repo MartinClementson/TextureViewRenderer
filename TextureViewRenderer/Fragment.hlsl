@@ -41,18 +41,14 @@ float MipLevel(float2 uv, float texture_width, float texture_height, int mipCoun
 
 float3 quantize(float3 color, int precision)
 {
-	float tPrecision = (8.0 * precision) - 1;
+	int tPrecision = ((8 * precision)/3) - 1;
 	float3 tColor = color;
 
-	for (int i = 0; i < 3; i++)
-	{
-		//float b = floor(f == 1.0 ? tPrecision : f * tPrecision - 1.0);
-
-		float b = floor(tPrecision * tColor[i]);
 		
-		tColor[i] = b / tPrecision;
+	tColor.x = floor(tPrecision * tColor.x) / tPrecision;
+	tColor.y = floor(tPrecision * tColor.y) / tPrecision;
+	tColor.z = floor(tPrecision * tColor.z) / tPrecision;
 		//b = floor(f2 == 1.0 ? 255 : f2 * 256.0)
-	}
 
 	return tColor;
 }
@@ -117,10 +113,13 @@ float4 PS_main(PS_IN input)  : SV_Target
 	diffuse = diffuse * lightColor[0];
 	ambient = (s.xyz * ambient); // vi multiplicerar ambienten med texturen också, så texturen syns korrekt
 	
-	float4 col = {(ambient + diffuse + specularLight)  , alpha };
-	
+	float3 finalColor = ambient + diffuse + specularLight;
+
+	float4 col = {(ambient + diffuse + specularLight), alpha };
+	finalColor = quantize(finalColor, 32);
 	
 	//return float4(input.TBN._m00_m01_m02, 1.0);
-	return mipVisualizer;
+	//return mipVisualizer;
+	//return float4(finalColor, 1.0);
 	return col;
 };
