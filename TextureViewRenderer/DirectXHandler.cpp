@@ -65,6 +65,7 @@ int DirectXHandler::Initialize(HWND wndHandle)
 		printf("FAILED Loading texture");
 	}
 	m_DeviceContext->PSSetShaderResources(0, 1, &materials[0].m_TextureView);
+	GenerateMipMaps(materials[0].textureResource, materials[0].textureResource, 1);
 	for (size_t i = 0; i < NUM_MESH_TYPES; i++)
 	{
 		m_models[i] = new Model(m_Device, MeshDataHandler::GetInstance()->GetMeshData(MeshType(i)),&materials[i]);
@@ -437,6 +438,84 @@ int DirectXHandler::CreateConstantBuffer()
 
 
 	return 1;
+}
+
+int DirectXHandler::GenerateMipMaps(ID3D11Resource * source, ID3D11Resource * mipTextures, int numMips)
+{
+	/*
+		Here we will generate custom mip levels for the source texture.
+		We do this because this project needs specialized, manually generated mip levels. This makes the standard mip generation ineffective.
+
+	*/
+	//Get the desciption of the original
+	D3D11_TEXTURE2D_DESC sourceDesc;
+	ID3D11Texture2D* sourceTex;
+	source->QueryInterface(&sourceTex);
+	sourceTex->GetDesc(&sourceDesc);
+	
+	//Create a new texture resource with the same dimensions as the source 
+	//generate the amount of mips that is specified by numMips
+	ID3D11Texture2D* newTexture				= nullptr;
+	ID3D11ShaderResourceView* newTextureSRV = nullptr;
+
+
+#pragma region Create the new Texture
+	D3D11_TEXTURE2D_DESC newTextDesc;
+
+	newTextDesc.Width			     = sourceDesc.Width;
+	newTextDesc.Height				 = sourceDesc.Height;
+	newTextDesc.MipLevels		     = numMips;
+	newTextDesc.ArraySize		     = 1;
+	newTextDesc.Format				 = DXGI_FORMAT_R8G8B8A8_UNORM;
+	newTextDesc.SampleDesc.Count     = 1;
+	newTextDesc.SampleDesc.Quality   = 0;
+	newTextDesc.Usage				 = D3D11_USAGE_DEFAULT;
+	newTextDesc.BindFlags			 = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
+	newTextDesc.CPUAccessFlags		 = D3D11_CPU_ACCESS_WRITE;
+	newTextDesc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
+
+	//Create the render target Texture
+
+	HRESULT hResult = m_Device->CreateTexture2D(&newTextDesc, NULL, &newTexture);
+	if (FAILED(hResult))
+	{
+		return 1;
+	}
+	//Set up the shader resource view
+	D3D11_SHADER_RESOURCE_VIEW_DESC DescRV;
+	DescRV.Format = newTextDesc.Format;
+	DescRV.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	DescRV.Texture2D.MipLevels = newTextDesc.MipLevels;
+	DescRV.Texture2D.MostDetailedMip = 0;
+
+	//Create the resourceView;
+
+	hResult = m_Device->CreateShaderResourceView(newTexture, &DescRV, &newTextureSRV);
+	if (FAILED(hResult))
+		return 1;
+
+#pragma endregion
+
+
+
+
+
+	//Copy the source to the new texture resource
+
+	/* 
+		for i in numMips
+			
+			copy mipTextures[i] into newTexture.Mips[i] (Assert the resolution is the same)
+			
+	
+	*/
+
+
+
+
+
+
+	return 0;
 }
 
 void DirectXHandler::UpdateWVPConstBuffer(ModelViewProjection * data)

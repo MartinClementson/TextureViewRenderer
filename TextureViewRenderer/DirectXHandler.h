@@ -42,7 +42,7 @@ private:
 	//ID3D11ShaderResourceView *m_TextureView = nullptr;
 	UI::TweakBar* m_tweakbar;
 
-
+	
 	//Models
 	Model* m_models[NUM_MESH_TYPES];
 
@@ -60,9 +60,11 @@ private:
 	int CreateContext(HWND wndHandle);
 	int CreateShaders();
 	int CreateConstantBuffer();
+	int GenerateMipMaps(ID3D11Resource* source, ID3D11Resource* mipTextures, int numMips);
 	void UpdateWVPConstBuffer(ModelViewProjection* data);
 	void UpdateLightConstBuffer(LightBuffer* data);
 	void UpdateVariableConstBuffer(variablesBuffer * data);
 	void SetViewPort(float width, float height);
+	
 };
 
