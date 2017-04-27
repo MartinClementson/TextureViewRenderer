@@ -127,6 +127,19 @@ int DirectXHandler::Update(float dt)
 	m_wvpData.model		 = m_models[elements->currentMesh]->GetTransformationMatrix();
 	UpdateWVPConstBuffer(&m_wvpData);
 
+	m_variableData.MIPBitPrecision[0]  = elements->mip0;
+	m_variableData.MIPBitPrecision[1]  = elements->mip1;
+	m_variableData.MIPBitPrecision[2]  = elements->mip2;
+	m_variableData.MIPBitPrecision[3]  = elements->mip3;
+	m_variableData.MIPBitPrecision[4]  = elements->mip4;
+	m_variableData.MIPBitPrecision[5]  = elements->mip5;
+	m_variableData.MIPBitPrecision[6]  = elements->mip6;
+	m_variableData.MIPBitPrecision[7]  = elements->mip7;
+	m_variableData.MIPBitPrecision[8]  = elements->mip8;
+	m_variableData.MIPBitPrecision[9]  = elements->mip9;
+	m_variableData.MIPBitPrecision[10] = elements->mip10;
+	UpdateVariableConstBuffer(&m_variableData);
+
 	ID3D11Buffer* vertBuff  = m_models[elements->currentMesh]->GetMeshData()->vertexBuffer;
 	ID3D11Buffer* indexBuff = m_models[elements->currentMesh]->GetMeshData()->indexBuffer;
 	
@@ -397,6 +410,32 @@ int DirectXHandler::CreateConstantBuffer()
 	
 		m_DeviceContext->PSSetConstantBuffers(0, 1, &m_lightConstBuffer);
 	}
+
+
+
+
+	CD3D11_BUFFER_DESC bufferDescV;
+
+
+	ZeroMemory(&bufferDescV, sizeof(bufferDescV));
+
+	bufferDescV.ByteWidth = sizeof(variablesBuffer);
+	bufferDescV.BindFlags = D3D11_BIND_CONSTANT_BUFFER; //detta är en konstant buffer
+	bufferDescV.Usage = D3D11_USAGE_DYNAMIC; //Read only from gpu, write from cpu
+	bufferDescV.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;  // vi måste förtydliga det.
+	bufferDescV.MiscFlags = 0;
+	bufferDescV.StructureByteStride = 0;
+
+	//Vi skapar buffern i device
+
+	hr = m_Device->CreateBuffer(&bufferDescV, nullptr, &m_variableConstBuffer);
+
+	if (SUCCEEDED(hr)) {
+
+		m_DeviceContext->PSSetConstantBuffers(2, 1, &m_variableConstBuffer);
+	}
+
+
 	return 1;
 }
 
@@ -429,6 +468,22 @@ void DirectXHandler::UpdateLightConstBuffer(LightBuffer * data)
 	*temporaryWorld = *data;
 	this->m_DeviceContext->Unmap(m_lightConstBuffer, 0);
 }
+
+
+void DirectXHandler::UpdateVariableConstBuffer(variablesBuffer * data)
+{
+	D3D11_MAPPED_SUBRESOURCE mappedResourceVar;
+	ZeroMemory(&mappedResourceVar, sizeof(mappedResourceVar));
+
+	//mapping to the matrixbuffer
+	HRESULT hr = this->m_DeviceContext->Map(this->m_variableConstBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResourceVar);
+
+	variablesBuffer* temporaryBuf = (variablesBuffer*)mappedResourceVar.pData;
+
+	*temporaryBuf = *data;
+	this->m_DeviceContext->Unmap(m_variableConstBuffer, 0);
+}
+
 
 void DirectXHandler::SetViewPort(float width, float height)
 {

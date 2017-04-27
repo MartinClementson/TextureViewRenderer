@@ -9,10 +9,13 @@ cbuffer lightBuffer : register(b0)
 	float4 camPos;
 };
 
+cbuffer variables : register(b2)
+{
+	int MIPBitPrecision[11];
+}
 
 SamplerState SampleType :register(s0); //modifies how the pixels are written to the polygon face when shaded
 Texture2D shaderTexture :register(t0);
-
 
 struct PS_IN
 {
@@ -114,10 +117,10 @@ float4 PS_main(PS_IN input)  : SV_Target
 	float3 finalColor = ambient + diffuse + specularLight;
 
 	float4 col = {(ambient + diffuse + specularLight), alpha };
-	finalColor = quantize(finalColor, 32);
+	finalColor = quantize(finalColor, MIPBitPrecision[0]);
 	
 	//return float4(input.TBN._m00_m01_m02, 1.0); printing tangent
 	//return mipVisualizer;
 	//return float4(finalColor, 1.0);
-	return col;
+	return float4(mipVisualizer);
 };

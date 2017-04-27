@@ -28,6 +28,10 @@ struct LightBuffer
 	float asdsadsa[16];
 };
 
+struct variablesBuffer
+{
+	int MIPBitPrecision[12];
+};
 // Used to send per-vertex data to the vertex shader.
 struct VertexData
 {

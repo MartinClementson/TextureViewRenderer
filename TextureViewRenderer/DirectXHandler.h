@@ -15,15 +15,17 @@ private:
 	ID3D11DeviceContext* m_DeviceContext = nullptr;
 	
 	// Buffers
-	ID3D11RenderTargetView* m_BackbufferRTV		= nullptr;
-	ID3D11Buffer*			m_VertexBuffer		= nullptr;
-	ID3D11Buffer*			m_wvpConstantBuffer = nullptr;
-	ID3D11Buffer*			m_lightConstBuffer  = nullptr;
+	ID3D11RenderTargetView* m_BackbufferRTV		  = nullptr;
+	ID3D11Buffer*			m_VertexBuffer		  = nullptr;
+	ID3D11Buffer*			m_wvpConstantBuffer	  = nullptr;
+	ID3D11Buffer*			m_lightConstBuffer	  = nullptr;
+	ID3D11Buffer*			m_variableConstBuffer = nullptr;
 
-	ModelViewProjection m_wvpData;
-	LightBuffer			m_lightData;
+	ModelViewProjection		m_wvpData;
+	LightBuffer				m_lightData;
+	variablesBuffer			m_variableData;
 	
-	ID3D11RasterizerState*	  m_rasterizerState;
+	ID3D11RasterizerState*	m_rasterizerState;
 	ID3D11DepthStencilView* m_depthStencilView = nullptr;
 	ID3D11Texture2D*		m_depthBuffer	   = nullptr;
 
@@ -60,6 +62,7 @@ private:
 	int CreateConstantBuffer();
 	void UpdateWVPConstBuffer(ModelViewProjection* data);
 	void UpdateLightConstBuffer(LightBuffer* data);
+	void UpdateVariableConstBuffer(variablesBuffer * data);
 	void SetViewPort(float width, float height);
 };
 

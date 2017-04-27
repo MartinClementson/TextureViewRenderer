@@ -26,7 +26,21 @@ int UI::TweakBar::Initialize(ID3D11Device * gDevice, float windowWidth, float wi
 
 	//TwAddButton(m_barHandle, "Rotation On/Off", TweakBar::RotationCall, NULL, "group = Mesh");
 	TwAddVarCB(m_barHandle, "Rotation", TW_TYPE_BOOLCPP, SetRotation, GetRotation, NULL, "group=Mesh key=r");
-	TwAddVarRW(m_barHandle, "Camera Distance", TW_TYPE_FLOAT, &m_Uidata.cameraDistance, "group = Camera step = 1.0 min =2.0");
+	TwAddVarRW(m_barHandle, "Camera Distance", TW_TYPE_FLOAT, &m_Uidata.cameraDistance, "group = Camera step = 0.5 min = 0.5");
+
+
+	TwAddVarRW(m_barHandle, "Mip 0", TW_TYPE_INT8, &m_Uidata.mip0, "group = MIPprecision step = 1 min = 2 max = 32");
+	TwAddVarRW(m_barHandle, "Mip 1", TW_TYPE_INT8, &m_Uidata.mip1, "group = MIPprecision step = 1 min = 2 max = 32");
+	TwAddVarRW(m_barHandle, "Mip 2", TW_TYPE_INT8, &m_Uidata.mip2, "group = MIPprecision step = 1 min = 2 max = 32");
+	TwAddVarRW(m_barHandle, "Mip 3", TW_TYPE_INT8, &m_Uidata.mip3, "group = MIPprecision step = 1 min = 2 max = 32");
+	TwAddVarRW(m_barHandle, "Mip 4", TW_TYPE_INT8, &m_Uidata.mip4, "group = MIPprecision step = 1 min = 2 max = 32");
+	TwAddVarRW(m_barHandle, "Mip 5", TW_TYPE_INT8, &m_Uidata.mip5, "group = MIPprecision step = 1 min = 2 max = 32");
+	TwAddVarRW(m_barHandle, "Mip 6", TW_TYPE_INT8, &m_Uidata.mip6, "group = MIPprecision step = 1 min = 2 max = 32");
+	TwAddVarRW(m_barHandle, "Mip 7", TW_TYPE_INT8, &m_Uidata.mip7, "group = MIPprecision step = 1 min = 2 max = 32");
+	TwAddVarRW(m_barHandle, "Mip 8", TW_TYPE_INT8, &m_Uidata.mip8, "group = MIPprecision step = 1 min = 2 max = 32");
+	TwAddVarRW(m_barHandle, "Mip 9", TW_TYPE_INT8, &m_Uidata.mip9, "group = MIPprecision step = 1 min = 2 max = 32");
+	TwAddVarRW(m_barHandle, "Mip 10", TW_TYPE_INT8, &m_Uidata.mip10, "group = MIPprecision step = 1 min = 2 max = 32");
+
 	//TwAddButton(m_barHandle, "Bounce", BounceCall, NULL, "group = Rotation");
 	//TwAddVarRW(m_barHandle, "Rotation", TW_TYPE_FLOAT, &animSpeed, "step = 0.001 group = Rotation");
 	//TwAddVarRW(myBar, "Rotation Speed", TW_TYPE_FLOAT, &speed, "group = Rotation step = 0.000001 min =0");
