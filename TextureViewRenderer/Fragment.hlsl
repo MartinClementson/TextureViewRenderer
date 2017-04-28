@@ -122,5 +122,5 @@ float4 PS_main(PS_IN input)  : SV_Target
 	//return float4(input.TBN._m00_m01_m02, 1.0); printing tangent
 	//return mipVisualizer;
 	//return float4(finalColor, 1.0);
-	return float4(mipVisualizer);
+	return col;
 };

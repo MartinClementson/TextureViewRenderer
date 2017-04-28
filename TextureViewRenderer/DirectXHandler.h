@@ -38,8 +38,8 @@ private:
 	ID3D11SamplerState* m_SampleState = nullptr;
 
 	//Textures
-	ID3D11Texture2D			 *m_Texture		= nullptr;
-	//ID3D11ShaderResourceView *m_TextureView = nullptr;
+	ID3D11Texture2D*		  m_currentCustomTexture		 = nullptr;
+	ID3D11ShaderResourceView* m_currentCustomSRV		= nullptr;
 	UI::TweakBar* m_tweakbar;
 
 	
@@ -60,7 +60,7 @@ private:
 	int CreateContext(HWND wndHandle);
 	int CreateShaders();
 	int CreateConstantBuffer();
-	int GenerateMipMaps(ID3D11Resource* source, ID3D11Resource* mipTextures, int numMips);
+	int GenerateMipMaps(ID3D11Resource* source, ID3D11Resource** mipTextures, int numMips);
 	void UpdateWVPConstBuffer(ModelViewProjection* data);
 	void UpdateLightConstBuffer(LightBuffer* data);
 	void UpdateVariableConstBuffer(variablesBuffer * data);

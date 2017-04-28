@@ -22,6 +22,10 @@ DirectXHandler::~DirectXHandler()
 	m_Device			!= nullptr ? m_Device			->Release(): NULL;
 	m_DeviceContext		!= nullptr ? m_DeviceContext	->Release(): NULL;
 	m_SampleState		!= nullptr ? m_SampleState		->Release(): NULL;
+
+	m_currentCustomTexture != nullptr ? m_currentCustomTexture->Release() : NULL;
+	m_currentCustomSRV	   != nullptr ? m_currentCustomSRV	 ->Release() : NULL;
+
 	for (size_t i = 0; i < NUM_MESH_TYPES; i++)
 	{
 		delete m_models[i];
@@ -52,20 +56,61 @@ int DirectXHandler::Initialize(HWND wndHandle)
 	this->UpdateLightConstBuffer(&m_lightData);
 	
 	Material materials[NUM_MESH_TYPES];
+#pragma region Load textures
+	std::string texturePathSource = "Blank.png";
 
-		std::string texturePath = "test_8.png";
-			//append the file name to the directory
-	size_t length = strlen(texturePath.c_str());
+
+	std::string mipTexturePaths[9]
+	{
+		"MipTextures/1.png",
+		"MipTextures/2.png",
+		"MipTextures/3.png",
+		"MipTextures/4.png",
+		"MipTextures/5.png",
+		"MipTextures/6.png",
+		"MipTextures/7.png",
+		"MipTextures/8.png",
+		"MipTextures/9.png",
+	};
+	ID3D11ShaderResourceView *mipTextureSRV[9] = {nullptr};
+	ID3D11Resource*			  mipTextureRes[9] = {nullptr};
+			
+	size_t length = strlen(texturePathSource.c_str());
 	wchar_t path[256];
-	mbstowcs_s(&length, path, texturePath.c_str(), length);
+	mbstowcs_s(&length, path, texturePathSource.c_str(), length);
 
 	HRESULT hr = DirectX::CreateWICTextureFromFile(m_Device, m_DeviceContext, path, &materials[0].textureResource, &materials[0].m_TextureView);
 	if (FAILED(hr))
 	{
 		printf("FAILED Loading texture");
 	}
+
+
+	for (size_t i = 0; i < 9; i++)
+	{
+		size_t length = strlen(mipTexturePaths[i].c_str());
+		wchar_t path[256];
+		mbstowcs_s(&length, path, mipTexturePaths[i].c_str(), length);
+
+		HRESULT hr = DirectX::CreateWICTextureFromFile(m_Device, m_DeviceContext, path, &mipTextureRes[i], &mipTextureSRV[i]);
+		if (FAILED(hr))
+		{
+			printf("FAILED Loading texture : ");
+			printf(mipTexturePaths[i].c_str());
+		}
+
+	}
+		m_DeviceContext->PSSetShaderResources(1, 9, mipTextureSRV);
+#pragma endregion 
 	m_DeviceContext->PSSetShaderResources(0, 1, &materials[0].m_TextureView);
-	GenerateMipMaps(materials[0].textureResource, materials[0].textureResource, 1);
+	GenerateMipMaps(materials[0].textureResource, mipTextureRes, 9);
+
+//for (size_t i = 0; i < 9; i++)
+//{
+//	mipTextureSRV[i]->Release();
+//	mipTextureRes[i]->Release();
+//}
+
 	for (size_t i = 0; i < NUM_MESH_TYPES; i++)
 	{
 		m_models[i] = new Model(m_Device, MeshDataHandler::GetInstance()->GetMeshData(MeshType(i)),&materials[i]);
@@ -440,13 +485,22 @@ int DirectXHandler::CreateConstantBuffer()
 	return 1;
 }
 
-int DirectXHandler::GenerateMipMaps(ID3D11Resource * source, ID3D11Resource * mipTextures, int numMips)
+int DirectXHandler::GenerateMipMaps(ID3D11Resource * source, ID3D11Resource ** mipTextures, int numMips)
 {
 	/*
 		Here we will generate custom mip levels for the source texture.
 		We do this because this project needs specialized, manually generated mip levels. This makes the standard mip generation ineffective.
+	
+	- Create a new texture resource with the same dimensions as the source 
+	- generate the amount of mips that is specified by numMips
+	- Copy the source to the new texture resource
+	
+	for i in numMips
+		copy mipTextures[i] into newTexture.Mips[i] (Assert the resolution is the same)
 
 	*/
+
+
 	//Get the desciption of the original
 	D3D11_TEXTURE2D_DESC sourceDesc;
 	ID3D11Texture2D* sourceTex;
@@ -455,8 +509,15 @@ int DirectXHandler::GenerateMipMaps(ID3D11Resource * source, ID3D11Resource * mi
 	
 	//Create a new texture resource with the same dimensions as the source 
 	//generate the amount of mips that is specified by numMips
-	ID3D11Texture2D* newTexture				= nullptr;
-	ID3D11ShaderResourceView* newTextureSRV = nullptr;
+	
+
+	if (m_currentCustomTexture != nullptr || m_currentCustomSRV != nullptr)
+	{
+		m_currentCustomTexture->Release();
+		m_currentCustomSRV->Release();
+		m_currentCustomTexture = nullptr;
+		m_currentCustomSRV	   = nullptr;
+	}
 
 
 #pragma region Create the new Texture
@@ -464,19 +525,19 @@ int DirectXHandler::GenerateMipMaps(ID3D11Resource * source, ID3D11Resource * mi
 
 	newTextDesc.Width			     = sourceDesc.Width;
 	newTextDesc.Height				 = sourceDesc.Height;
-	newTextDesc.MipLevels		     = numMips;
+	newTextDesc.MipLevels		     = numMips +1;// index 0 is the original level
 	newTextDesc.ArraySize		     = 1;
-	newTextDesc.Format				 = DXGI_FORMAT_R8G8B8A8_UNORM;
+	newTextDesc.Format				 = sourceDesc.Format;
 	newTextDesc.SampleDesc.Count     = 1;
 	newTextDesc.SampleDesc.Quality   = 0;
 	newTextDesc.Usage				 = D3D11_USAGE_DEFAULT;
 	newTextDesc.BindFlags			 = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
 	newTextDesc.CPUAccessFlags		 = D3D11_CPU_ACCESS_WRITE;
-	newTextDesc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
+	newTextDesc.MiscFlags			 = D3D11_RESOURCE_MISC_GENERATE_MIPS;
 
 	//Create the render target Texture
 
-	HRESULT hResult = m_Device->CreateTexture2D(&newTextDesc, NULL, &newTexture);
+	HRESULT hResult = m_Device->CreateTexture2D(&newTextDesc, NULL, &m_currentCustomTexture);
 	if (FAILED(hResult))
 	{
 		return 1;
@@ -490,15 +551,13 @@ int DirectXHandler::GenerateMipMaps(ID3D11Resource * source, ID3D11Resource * mi
 
 	//Create the resourceView;
 
-	hResult = m_Device->CreateShaderResourceView(newTexture, &DescRV, &newTextureSRV);
+	hResult = m_Device->CreateShaderResourceView(m_currentCustomTexture, &DescRV, &m_currentCustomSRV);
 	if (FAILED(hResult))
 		return 1;
 
+	m_DeviceContext->GenerateMips(m_currentCustomSRV);
+	m_DeviceContext->PSSetShaderResources(0, 1, &m_currentCustomSRV);
 #pragma endregion
-
-
-
-
 
 	//Copy the source to the new texture resource
 
@@ -506,10 +565,16 @@ int DirectXHandler::GenerateMipMaps(ID3D11Resource * source, ID3D11Resource * mi
 		for i in numMips
 			
 			copy mipTextures[i] into newTexture.Mips[i] (Assert the resolution is the same)
-			
-	
 	*/
 
+	//m_DeviceContext->CopyResource(newTexture, source);
+	m_DeviceContext->CopySubresourceRegion(m_currentCustomTexture, 0, 0, 0, 0, source, 0, NULL);
+
+	for (size_t i = 0; i < numMips; i++) //for eaach
+	{
+		m_DeviceContext->CopySubresourceRegion(m_currentCustomTexture, i + 1, 0, 0, 0, mipTextures[i], 0, NULL);
+
+	}
 
 
 
