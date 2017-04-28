@@ -11,7 +11,7 @@ cbuffer lightBuffer : register(b0)
 
 cbuffer variables : register(b2)
 {
-	int MIPBitPrecision[11];
+	int MIPBitPrecision[12];
 }
 
 SamplerState SampleType :register(s0); //modifies how the pixels are written to the polygon face when shaded
@@ -37,9 +37,24 @@ float MipLevel(float2 uv, float texture_width, float texture_height, int mipCoun
 	d = clamp(d, 1.0, rangeClamp);
 
 	float mipLevel = 0.5 * log2(d);
-	//mipLevel = floor(mipLevel); uncomment to get integer value of the closest level
+	mipLevel = floor(mipLevel); //uncomment to get integer value of the closest level
 
 	return mipLevel;
+}
+
+float mip_map_level(in float2 texture_coordinate)
+{
+	// The OpenGL Graphics System: A Specification 4.2
+	//  - chapter 3.9.11, equation 3.21
+
+
+	float2  dx_vtc = ddx(texture_coordinate);
+	float2  dy_vtc = ddy(texture_coordinate);
+	float delta_max_sqr = max(dot(dx_vtc, dx_vtc), dot(dy_vtc, dy_vtc));
+
+
+	//return max(0.0, 0.5 * log2(delta_max_sqr) - 1.0); // == log2(sqrt(delta_max_sqr));
+	return 0.5 * log2(delta_max_sqr); // == log2(sqrt(delta_max_sqr));
 }
 
 float3 quantize(float3 color, int precision)
@@ -56,19 +71,25 @@ float3 quantize(float3 color, int precision)
 
 float4 PS_main(PS_IN input)  : SV_Target
 { 
+	int bitPrecision = 0;
 
-	float texture_height = 0.0f, texture_width = 0.0f, elements = 0.0f,mipLevels = 0.0f;
+	float3 normalSamp = normalize(mul(2.0f * shaderTexture.Sample(SampleType, input.Texture).rgb - 1.0f, input.TBN));
+
+
+	float texture_height = 0.0f, texture_width = 0.0f, elements = 0.0f, mipLevels = 0.0f;
 	shaderTexture.GetDimensions(0, texture_width, texture_height, mipLevels);
 	
-	float mipLevel = MipLevel(input.Texture, texture_width, texture_height, mipLevels);
-
+	//float mipLevel = MipLevel(input.Texture, texture_width, texture_height, mipLevels);
+	float mipLevel = mip_map_level(input.Texture);
 	float rangedMip;
-	float oldrange = (mipLevels - 1);
 
-	rangedMip = (((mipLevel - 1.0f) * 1.0f) / (mipLevels - 1.0f)) + 0;
+	rangedMip = (((mipLevel - 1.0f)) / (mipLevels - 1.0f));
 	//rangedMip *= -1.0f;
 
 	float4 mipVisualizer = float4(rangedMip, rangedMip, rangedMip, 1.0f);
+
+
+	bitPrecision = MIPBitPrecision[floor(mipLevel)];
 
 
 	//float4 s = float4(0.0f,0.0f,1.0f,1.0f);
@@ -85,7 +106,7 @@ float4 PS_main(PS_IN input)  : SV_Target
 	
 	//vi beräknar hur mycket av pixeln som ska lysas upp, dvs jämföra vinkeln mellan ljuset och normalen. går det under 0 så clampar vi till 0.
 	
-	float fDot = max(0.0f, dot(normalize(vRay), normalize(input.Normal)));
+	float fDot = max(0.0f, dot(normalize(vRay), normalize(normalSamp)));
 	
 	
 	float3 ambient = { 0.1f, 0.1f, 0.1f }; //ambientLight
@@ -117,10 +138,10 @@ float4 PS_main(PS_IN input)  : SV_Target
 	float3 finalColor = ambient + diffuse + specularLight;
 
 	float4 col = {(ambient + diffuse + specularLight), alpha };
-	finalColor = quantize(finalColor, MIPBitPrecision[0]);
+	finalColor = quantize(finalColor, bitPrecision);
 	
-	//return float4(input.TBN._m00_m01_m02, 1.0); printing tangent
+	//return float4(input.TBN._m00_m01_m02, 1.0); //printing tangent
 	//return mipVisualizer;
 	//return float4(finalColor, 1.0);
-	return float4(mipVisualizer);
+	return col;
 };

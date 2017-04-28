@@ -6,11 +6,11 @@ namespace UI
 		bool  rotate		 = false;
 		float cameraDistance = 5.0f;
 		MeshType currentMesh;
-
+		float rot_x = 0.0, rot_y = 0.0;
 		int  mip0 = 32, mip1 = 32, mip2 = 32,
 			mip3 = 32, mip4 = 32, mip5 = 32,
 			mip6 = 32, mip7 = 32, mip8 = 32,
-			mip9 = 32, mip10 = 32;
+			mip9 = 32, mip10 = 32, mip11 = 32;
 	 };
 
 

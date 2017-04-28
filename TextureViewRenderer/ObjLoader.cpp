@@ -112,13 +112,13 @@ int ObjLoader::loadObj(const char * path, VertexData *& vData, unsigned int *& i
 		DirectX::XMStoreFloat3(&vData[i].pos, DirectX::XMVectorScale(DirectX::XMLoadFloat3(&out_vertices[i]), scale));
 		vData[i].normal = out_normals[i];
 		vData[i].UV = out_uvs[i];
-		vData[i].tangent = DirectX::XMFLOAT3(out_tangents[i].x, out_tangents[i].y, out_tangents[i].z);
+		vData[i].tangent = DirectX::XMFLOAT4(out_tangents[i].x, out_tangents[i].y, out_tangents[i].z, out_tangents[i].w);
 		if (openGL)
 		{
 			vData[i].pos.z *= -1.0;
 			vData[i].normal.z *= -1.0;
 			vData[i].tangent.z *= -1.0;
-			vData[i].UV.x = vData[i].UV.x - 1.0;
+			vData[i].UV.y = 1.0 - vData[i].UV.y;
 		}
 	}
 	if (openGL)
@@ -206,7 +206,10 @@ void ObjLoader::CalculateTangentArray(unsigned int vertexCount, const DirectX::X
 		);
 	
 		// Calculate handedness tangent[a].w = (Dot(Cross(n, t), tan2[a]) < 0.0F) ? -1.0F : 1.0F;
-		//tangent[a].w = (DirectX::XMVector3Dot(DirectX::XMVector3Cross(n, t), DirectX::XMLoadFloat3(&tan2[a])).m128_f32[0] < 0.0F) ? -1.0F : 1.0F;
+		tangent[a].w = (DirectX::XMVector3Dot(DirectX::XMVector3Cross(n, t), DirectX::XMLoadFloat3(&tan2[a])).m128_f32[0] < 0.0F) ? -1.0F : 1.0F;
+
+		//if ((DirectX::XMVector3Dot(DirectX::XMVector3Cross(n, t), DirectX::XMLoadFloat3(&tan2[a])).m128_f32[0] < 0.0F))
+		//	tangent[a].z *= -1;
 	}
 
 	delete[] tan1;

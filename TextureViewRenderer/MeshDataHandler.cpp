@@ -16,7 +16,7 @@ int MeshDataHandler::m_initialize(ID3D11Device * gDevice)
 	VertexData * complexData;
 	unsigned int * complexIndices;
 	unsigned int cvCount, ciCount;
-	objloader.loadObj("meshes/stanford-bunny.obj", complexData, complexIndices, cvCount, ciCount, 0.005, false);
+	objloader.loadObj("meshes/stanford-bunny-maya.obj", complexData, complexIndices, cvCount, ciCount, 0.005, true);
 
 	m_meshData[COMPLEX].numVertices = cvCount;
 	m_meshData[COMPLEX].numIndices = ciCount;
@@ -31,13 +31,13 @@ int MeshDataHandler::m_initialize(ID3D11Device * gDevice)
 	m_meshData[CUBE].indexData = cubeIndices;
 	m_meshData[CUBE].vertexData = cubeData;
 
-	VertexData * planeData;
-	unsigned int * planeIndices;
-	objloader.loadObj("meshes/plane.obj", planeData, planeIndices, cvCount, ciCount);
-	m_meshData[PLANE].numVertices = cvCount;
-	m_meshData[PLANE].numIndices = ciCount;
-	m_meshData[PLANE].indexData = planeIndices;
-	m_meshData[PLANE].vertexData = planeData;
+	VertexData * sphereData;
+	unsigned int * sphereIndices;
+	objloader.loadObj("meshes/sphere.obj", sphereData, sphereIndices, cvCount, ciCount);
+	m_meshData[SPHERE].numVertices = cvCount;
+	m_meshData[SPHERE].numIndices = ciCount;
+	m_meshData[SPHERE].indexData = sphereIndices;
+	m_meshData[SPHERE].vertexData = sphereData;
 	
 
 	for (int i = 0; i < NUM_MESH_TYPES; i++)

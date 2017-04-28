@@ -3,7 +3,7 @@
 
 	enum MeshType
 	{
-		PLANE,
+		SPHERE,
 		CUBE,
 		COMPLEX,
 
@@ -38,7 +38,7 @@ struct VertexData
 	DirectX::XMFLOAT3 pos;
 	DirectX::XMFLOAT2 UV;
 	DirectX::XMFLOAT3 normal;
-	DirectX::XMFLOAT3 tangent;
+	DirectX::XMFLOAT4 tangent;
 };
 
 struct Material
