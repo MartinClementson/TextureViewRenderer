@@ -27,7 +27,7 @@ float3x3 TBN(float3 normal, float4 tangent)
 {
 	float handedNess = tangent.w;
 	tangent.xyz -= dot(tangent.xyz, normal) * normal;
-	float3 B = -cross(normal* handedNess, tangent.xyz ) ; //Bitangent
+	float3 B = -cross(normal, tangent.xyz); //Bitangent
 
 	return float3x3(tangent.xyz, B.xyz, normal.xyz); //return tangent space matrix
 }

@@ -53,7 +53,7 @@ int DirectXHandler::Initialize(HWND wndHandle)
 	
 	Material materials[NUM_MESH_TYPES];
 
-		std::string texturePath = "meshes/testNormal.png";
+		std::string texturePath = "meshes/rockNormal.jpg";
 			//append the file name to the directory
 	size_t length = strlen(texturePath.c_str());
 	wchar_t path[256];

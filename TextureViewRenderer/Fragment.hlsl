@@ -123,7 +123,7 @@ float4 PS_main(PS_IN input)  : SV_Target
 	specularLight = specularLight * lightColor[0] * fDot;
 	
 	//sampla från texturen.
-	float3 s = shaderTexture.Sample(SampleType, input.Texture).xyz;
+	float3 s = { 0.5,0.5,0.5 };//shaderTexture.Sample(SampleType, input.Texture).xyz;
 	
 	//Alpha, funkar inte nu, för jag har inte "aktiverat" att hantera alpha i cpun
 	float alpha = 1.0f;
