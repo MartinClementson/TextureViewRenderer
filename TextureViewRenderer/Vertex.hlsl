@@ -5,7 +5,7 @@ struct VS_IN
 	float3 Pos : POSITION;
 	float2 Texture : TEXCOORD0;
 	float3 Normal : NORMAL;
-	float4 Tangent : TANGENT;
+	float3 Tangent : TANGENT;
 };
 
 struct VS_OUT
@@ -13,7 +13,7 @@ struct VS_OUT
 	float4 Pos : POSITION;
 	float2 Texture : TEXCOORD0;
 	float3 Normal: NORMAL;
-	float4 Tangent : TANGENT;
+	float3 Tangent : TANGENT;
 };
 //-----------------------------------------------------------------------------------------
 // VertexShader: VSScene

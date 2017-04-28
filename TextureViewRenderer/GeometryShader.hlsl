@@ -11,7 +11,7 @@ struct GSInput
 	float4 pos :POSITION;
 	float2 Texture : TEXCOORD0;
 	float3 normal: NORMAL;
-	float4 tangent : TANGENT;
+	float3 tangent : TANGENT;
 };
 
 struct GSOutput
