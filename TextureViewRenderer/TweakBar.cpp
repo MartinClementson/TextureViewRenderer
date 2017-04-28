@@ -50,7 +50,7 @@ int UI::TweakBar::Initialize(ID3D11Device * gDevice, float windowWidth, float wi
 	//TwAddVarRW(myBar, "Light Color", TW_TYPE_COLOR4F, &lightColor, "group = Light");
 	//TwAddVarRW(myBar, "Light Intensity", TW_TYPE_FLOAT, &lightInt, "group = Light min= 0.0 max = 1.0 step = 0.05");
 
-	TwEnumVal shapeEV[NUM_MESH_TYPES] = { { SPHERE, "Plane" },{ CUBE, "Cube" },{ COMPLEX, "JOHNS_ANSIKTE" } };
+	TwEnumVal shapeEV[NUM_MESH_TYPES] = { { SPHERE, "Sphere" },{ CUBE, "Cube" },{ COMPLEX, "Bunny" } };
 	// Create a type for the enum shapeEV
 	TwType shapeType = TwDefineEnum("ShapeType", shapeEV, NUM_MESH_TYPES);
 	// add 'g_CurrentShape' to 'bar': this is a variable of type ShapeType. Its key shortcuts are [<] and [>].
