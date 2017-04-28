@@ -105,7 +105,7 @@ int ObjLoader::loadObj(const char * path, VertexData *& vData, unsigned int *& i
 	for (unsigned int i = 0; i < vertexIndices.size(); i++)
 		iData[i] = i;
 	
-	CalculateTangentArray(vertexIndices.size(), out_vertices.data(), out_normals.data(), out_uvs.data(), iCount, iData, out_tangents);
+	//CalculateTangentArray(vertexIndices.size(), out_vertices.data(), out_normals.data(), out_uvs.data(), iCount, iData, out_tangents);
 	
 	std::string tangentPath = path;
 	for (size_t i = 0; i < 3; i++){
@@ -114,7 +114,7 @@ int ObjLoader::loadObj(const char * path, VertexData *& vData, unsigned int *& i
 	tangentPath.push_back('t');
 	tangentPath.push_back('a');
 	tangentPath.push_back('n');
-	//LoadTangentData(tangentPath.c_str(), out_tangents, vertexIndices.size());
+	LoadTangentData(tangentPath.c_str(), out_tangents, vertexIndices.size());
 	for (unsigned int i = 0; i < vertexIndices.size(); i++)
 	{
 		DirectX::XMStoreFloat3(&vData[i].pos, DirectX::XMVectorScale(DirectX::XMLoadFloat3(&out_vertices[i]), scale));
@@ -226,16 +226,24 @@ void ObjLoader::CalculateTangentArray(unsigned int vertexCount, const DirectX::X
 int ObjLoader::LoadTangentData(const char * path, DirectX::XMFLOAT3* destArray, int numVerts)
 {
 	std::ifstream file;
-	file.open(path);
+	file.open(path, std::ifstream::binary);
 	if (file.is_open())
 	{
+		//int numItems = 0;
+		//while (!file.eof())
+		//{
+		//	//file.read((char*)destArray, sizeof(float) * 3);
+		//	numItems += 1;
+		//}
+
 		file.read((char*)destArray, sizeof(float) * 3 * numVerts);
+		
 		file.close();
 		return 1;
 	}
 	else
 	{
-		printf("Impossible to open the file !\n");
+		printf("Impossible to open the file !\n"); //"Nothing is impossible" - Shia labeuf
 		return 0;
 	}
 }

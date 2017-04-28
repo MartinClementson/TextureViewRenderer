@@ -27,7 +27,7 @@ float3x3 TBN(float3 normal, float4 tangent)
 {
 	float handedNess = tangent.w;
 	tangent.xyz -= dot(tangent.xyz, normal) * normal;
-	float3 B = -cross(normal* handedNess, tangent.xyz ) ; //Bitangent
+	float3 B = -cross(normal, tangent.xyz ) ; //Bitangent
 
 	return float3x3(tangent.xyz, B.xyz, normal.xyz); //return tangent space matrix
 }
@@ -57,7 +57,7 @@ void GS_main(
 		element.pos = mul(element.pos, transpose(View));
 		element.pos = mul(element.pos, transpose(Projection));
 		element.Texture = input[i].Texture;
-		element.TBN = TBN(element.normal, mul(input[i].tangent, transpose(World)));
+		element.TBN = TBN(element.normal, mul(float4(input[i].tangent,1.0f), transpose(World)));
 
 		output.Append(element);
 	}
