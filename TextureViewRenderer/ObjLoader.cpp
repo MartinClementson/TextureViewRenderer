@@ -23,7 +23,7 @@ int ObjLoader::loadObj(const char * path, VertexData *& vData, unsigned int *& i
 	std::vector< DirectX::XMFLOAT3 > out_vertices;
 	std::vector< DirectX::XMFLOAT2 > out_uvs;
 	std::vector< DirectX::XMFLOAT3 > out_normals;
-	DirectX::XMFLOAT4 * out_tangents;
+	DirectX::XMFLOAT3 * out_tangents;
 
 	vertexIndices.reserve(25000); uvIndices.reserve(25000); normalIndices.reserve(25000);
 
@@ -100,19 +100,27 @@ int ObjLoader::loadObj(const char * path, VertexData *& vData, unsigned int *& i
 	iData = new unsigned int[vertexIndices.size()];
 	vCount = vertexIndices.size();
 	iCount = vCount;
-	out_tangents = new DirectX::XMFLOAT4[vertexIndices.size()];
+	out_tangents = new DirectX::XMFLOAT3[vertexIndices.size()];
 
 	for (unsigned int i = 0; i < vertexIndices.size(); i++)
 		iData[i] = i;
 	
-	CalculateTangentArray(vertexIndices.size(), out_vertices.data(), out_normals.data(), out_uvs.data(), iCount, iData, out_tangents);
+	//CalculateTangentArray(vertexIndices.size(), out_vertices.data(), out_normals.data(), out_uvs.data(), iCount, iData, out_tangents);
+	
+	std::string tangentPath = path;
+	for (size_t i = 0; i < 3; i++){
+		tangentPath.pop_back();}
 
+	tangentPath.push_back('t');
+	tangentPath.push_back('a');
+	tangentPath.push_back('n');
+	LoadTangentData(tangentPath.c_str(), out_tangents, vertexIndices.size());
 	for (unsigned int i = 0; i < vertexIndices.size(); i++)
 	{
 		DirectX::XMStoreFloat3(&vData[i].pos, DirectX::XMVectorScale(DirectX::XMLoadFloat3(&out_vertices[i]), scale));
 		vData[i].normal = out_normals[i];
 		vData[i].UV = out_uvs[i];
-		vData[i].tangent = DirectX::XMFLOAT4(out_tangents[i].x, out_tangents[i].y, out_tangents[i].z, out_tangents[i].w);
+		vData[i].tangent = DirectX::XMFLOAT3(out_tangents[i].x, out_tangents[i].y, out_tangents[i].z);
 		if (openGL)
 		{
 			vData[i].pos.z *= -1.0;
@@ -137,7 +145,7 @@ int ObjLoader::loadObj(const char * path, VertexData *& vData, unsigned int *& i
 }
 
 void ObjLoader::CalculateTangentArray(unsigned int vertexCount, const DirectX::XMFLOAT3 *vertex, const DirectX::XMFLOAT3 *normal,
-	const DirectX::XMFLOAT2 *texcoord, unsigned int indexCount, unsigned int * indexList, DirectX::XMFLOAT4 *tangent)
+	const DirectX::XMFLOAT2 *texcoord, unsigned int indexCount, unsigned int * indexList, DirectX::XMFLOAT3 *tangent)
 {
 	DirectX::XMFLOAT3 *tan1 = new DirectX::XMFLOAT3[vertexCount * 2];
 	DirectX::XMFLOAT3 *tan2 = tan1 + vertexCount;
@@ -198,7 +206,7 @@ void ObjLoader::CalculateTangentArray(unsigned int vertexCount, const DirectX::X
 		DirectX::XMVECTOR t = DirectX::XMLoadFloat3(&tan1[a]);
 		
 		// Gram-Schmidt orthogonalize, Normalize((t - n * Dot(n, t)))
-		DirectX::XMStoreFloat4(&tangent[a],
+		DirectX::XMStoreFloat3(&tangent[a],
 			DirectX::XMVector3Normalize(
 				DirectX::XMVectorSubtract(t, DirectX::XMVectorScale(n, DirectX::XMVector3Dot(n, t).m128_f32[0])
 				)
@@ -206,7 +214,7 @@ void ObjLoader::CalculateTangentArray(unsigned int vertexCount, const DirectX::X
 		);
 	
 		// Calculate handedness tangent[a].w = (Dot(Cross(n, t), tan2[a]) < 0.0F) ? -1.0F : 1.0F;
-		tangent[a].w = (DirectX::XMVector3Dot(DirectX::XMVector3Cross(n, t), DirectX::XMLoadFloat3(&tan2[a])).m128_f32[0] < 0.0F) ? -1.0F : 1.0F;
+		//tangent[a].w = (DirectX::XMVector3Dot(DirectX::XMVector3Cross(n, t), DirectX::XMLoadFloat3(&tan2[a])).m128_f32[0] < 0.0F) ? -1.0F : 1.0F;
 
 		//if ((DirectX::XMVector3Dot(DirectX::XMVector3Cross(n, t), DirectX::XMLoadFloat3(&tan2[a])).m128_f32[0] < 0.0F))
 		//	tangent[a].z *= -1;
@@ -215,7 +223,30 @@ void ObjLoader::CalculateTangentArray(unsigned int vertexCount, const DirectX::X
 	delete[] tan1;
 }
 
+int ObjLoader::LoadTangentData(const char * path, DirectX::XMFLOAT3* destArray, int numVerts)
+{
+	std::ifstream file;
+	file.open(path, std::ifstream::binary);
+	if (file.is_open())
+	{
+		//int numItems = 0;
+		//while (!file.eof())
+		//{
+		//	//file.read((char*)destArray, sizeof(float) * 3);
+		//	numItems += 1;
+		//}
 
+		file.read((char*)destArray, sizeof(float) * 3 * numVerts);
+		
+		file.close();
+		return 1;
+	}
+	else
+	{
+		printf("Impossible to open the file !\n"); //"Nothing is impossible" - Shia labeuf
+		return 0;
+	}
+}
 ObjLoader::~ObjLoader()
 {
 }

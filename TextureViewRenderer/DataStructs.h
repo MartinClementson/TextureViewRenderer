@@ -38,7 +38,7 @@ struct VertexData
 	DirectX::XMFLOAT3 pos;
 	DirectX::XMFLOAT2 UV;
 	DirectX::XMFLOAT3 normal;
-	DirectX::XMFLOAT4 tangent;
+	DirectX::XMFLOAT3 tangent;
 };
 
 struct Material

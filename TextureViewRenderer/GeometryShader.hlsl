@@ -11,7 +11,7 @@ struct GSInput
 	float4 pos :POSITION;
 	float2 Texture : TEXCOORD0;
 	float3 normal: NORMAL;
-	float4 tangent : TANGENT;
+	float3 tangent : TANGENT;
 };
 
 struct GSOutput
@@ -57,7 +57,7 @@ void GS_main(
 		element.pos = mul(element.pos, transpose(View));
 		element.pos = mul(element.pos, transpose(Projection));
 		element.Texture = input[i].Texture;
-		element.TBN = TBN(element.normal, mul(input[i].tangent, transpose(World)));
+		element.TBN = TBN(element.normal, mul(float4(input[i].tangent,1.0f), transpose(World)));
 
 		output.Append(element);
 	}
