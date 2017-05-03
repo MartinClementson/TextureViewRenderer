@@ -59,7 +59,7 @@ int DirectXHandler::Initialize(HWND wndHandle)
 #pragma region Load textures
 	std::string texturePathSource = "Blank.png";
 
-
+		std::string texturePath = "meshes/rockNormal.jpg";
 	std::string mipTexturePaths[9]
 	{
 		"MipTextures/1.png",
@@ -159,6 +159,19 @@ int DirectXHandler::Update(float dt)
 	m_wvpData.projection = m_cam.GetProjectionMatrix();
 	m_wvpData.view		 = m_cam.GetViewMatrix();
 
+	DirectX::XMFLOAT4X4 rotMatrixx;
+	DirectX::XMStoreFloat4x4(&rotMatrixx, DirectX::XMMatrixRotationX(DirectX::XMConvertToRadians(elements->rot_x)));
+	DirectX::XMFLOAT4X4 rotMatrixy;
+	DirectX::XMStoreFloat4x4(&rotMatrixy, DirectX::XMMatrixRotationY(DirectX::XMConvertToRadians(elements->rot_y)));
+	//m_models[elements->currentMesh]->SetRotation(rotMatrixy);
+	//m_models[elements->currentMesh]->Update();
+
+	//m_models[elements->currentMesh]->SetRotation(rotMatrixx);
+	//m_models[elements->currentMesh]->Update();
+
+	DirectX::XMStoreFloat4x4(&rotMatrixx, DirectX::XMMatrixMultiply(DirectX::XMLoadFloat4x4(&rotMatrixy), DirectX::XMLoadFloat4x4(&rotMatrixx)));
+	m_models[elements->currentMesh]->SetRotation(rotMatrixx);
+	m_models[elements->currentMesh]->Update();
 	if (elements->rotate)
 	{
 		DirectX::XMFLOAT4X4 rotMatrix;
@@ -173,18 +186,19 @@ int DirectXHandler::Update(float dt)
 	m_wvpData.model		 = m_models[elements->currentMesh]->GetTransformationMatrix();
 	UpdateWVPConstBuffer(&m_wvpData);
 
-	m_variableData.MIPBitPrecision[0]  = elements->mip0;
-	m_variableData.MIPBitPrecision[1]  = elements->mip1;
-	m_variableData.MIPBitPrecision[2]  = elements->mip2;
-	m_variableData.MIPBitPrecision[3]  = elements->mip3;
-	m_variableData.MIPBitPrecision[4]  = elements->mip4;
-	m_variableData.MIPBitPrecision[5]  = elements->mip5;
-	m_variableData.MIPBitPrecision[6]  = elements->mip6;
-	m_variableData.MIPBitPrecision[7]  = elements->mip7;
-	m_variableData.MIPBitPrecision[8]  = elements->mip8;
-	m_variableData.MIPBitPrecision[9]  = elements->mip9;
-	m_variableData.MIPBitPrecision[10] = elements->mip10;
-	UpdateVariableConstBuffer(&m_variableData);
+	//m_variableData.MIPBitPrecision[0]  = elements->mip0;
+	//m_variableData.MIPBitPrecision[1]  = elements->mip1;
+	//m_variableData.MIPBitPrecision[2]  = elements->mip2;
+	//m_variableData.MIPBitPrecision[3]  = elements->mip3;
+	//m_variableData.MIPBitPrecision[4]  = elements->mip4;
+	//m_variableData.MIPBitPrecision[5]  = elements->mip5;
+	//m_variableData.MIPBitPrecision[6]  = elements->mip6;
+	//m_variableData.MIPBitPrecision[7]  = elements->mip7;
+	//m_variableData.MIPBitPrecision[8]  = elements->mip8;
+	//m_variableData.MIPBitPrecision[9]  = elements->mip9;
+	//m_variableData.MIPBitPrecision[10] = elements->mip10;
+	//m_variableData.MIPBitPrecision[11] = elements->mip11;
+	//UpdateVariableConstBuffer(&m_variableData);
 
 	ID3D11Buffer* vertBuff  = m_models[elements->currentMesh]->GetMeshData()->vertexBuffer;
 	ID3D11Buffer* indexBuff = m_models[elements->currentMesh]->GetMeshData()->indexBuffer;
@@ -352,7 +366,7 @@ int DirectXHandler::CreateShaders()
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,  0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 20, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{"TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+		{"TANGENT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
 	
 	hr = m_Device->CreateInputLayout(inputDesc, ARRAYSIZE(inputDesc), pVS->GetBufferPointer(), pVS->GetBufferSize(), &m_VertexLayout);

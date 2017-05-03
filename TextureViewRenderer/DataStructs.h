@@ -3,7 +3,7 @@
 
 	enum MeshType
 	{
-		PLANE,
+		SPHERE,
 		CUBE,
 		COMPLEX,
 

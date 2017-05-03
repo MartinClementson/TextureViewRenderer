@@ -1,6 +1,6 @@
 #pragma once
-#define WINDOW_WIDTH 800.f
-#define WINDOW_HEIGHT 600.f
+#define WINDOW_WIDTH 1920.f
+#define WINDOW_HEIGHT 1080.f
 #include <windows.h>
 #include <assert.h>
 #include <d3d11.h>
