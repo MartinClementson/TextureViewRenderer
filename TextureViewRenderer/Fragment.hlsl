@@ -44,7 +44,7 @@ float MipLevel(float2 uv, float texture_width, float texture_height, int mipCoun
 
 float3 quantize(float3 color, int precision)
 {
-	int tPrecision = ((8 * precision)/3) - 1;
+	int tPrecision = ((8.0f * precision)/3) - 1;
 	float3 tColor = color;
 
 	tColor.x = floor(tPrecision * tColor.x) / tPrecision;
