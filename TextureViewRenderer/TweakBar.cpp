@@ -56,7 +56,7 @@ int UI::TweakBar::Initialize(ID3D11Device * gDevice, float windowWidth, float wi
 	// add 'g_CurrentShape' to 'bar': this is a variable of type ShapeType. Its key shortcuts are [<] and [>].
 	TwAddVarRW(m_barHandle, "Shape", shapeType, &m_Uidata.currentMesh, "group = Mesh keyIncr='<' keyDecr='>' help='Change object shape.' ");
 	TwAddVarCB(m_barHandle, "Rotation", TW_TYPE_BOOLCPP, SetRotation, GetRotation, NULL, "group=Mesh key=r");
-	TwAddVarRW(m_barHandle, "Camera Distance", TW_TYPE_FLOAT, &m_Uidata.cameraDistance, "group = Camera step = 0.5 min = 0.5");
+	TwAddVarRW(m_barHandle, "Camera Distance", TW_TYPE_FLOAT, &m_Uidata.cameraDistance, "group = Camera step = 0.1 min = 0.1");
 
 	TwAddVarRW(m_barHandle, "Rot x", TW_TYPE_FLOAT, &m_Uidata.rot_x, "group = Mesh step = 1.0 min = 0.0 max = 360.0");
 	TwAddVarRW(m_barHandle, "Rot y", TW_TYPE_FLOAT, &m_Uidata.rot_y, "group = Mesh step = 1.0 min = 0.0 max = 360.0");

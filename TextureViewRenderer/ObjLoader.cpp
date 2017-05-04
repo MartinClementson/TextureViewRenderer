@@ -223,7 +223,8 @@ void ObjLoader::CalculateTangentArray(unsigned int vertexCount, const DirectX::X
 	delete[] tan1;
 }
 
-int ObjLoader::LoadTangentData(const char * path, DirectX::XMFLOAT3* destArray, int numVerts)
+
+int ObjLoader::LoadTangentData(const char * path, DirectX::XMFLOAT3* destArray, int numVerts)
 {
 	std::ifstream file;
 	file.open(path, std::ifstream::binary);

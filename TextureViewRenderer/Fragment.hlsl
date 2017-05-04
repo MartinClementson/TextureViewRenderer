@@ -106,7 +106,7 @@ float4 PS_main(PS_IN input)  : SV_Target
 	
 	//vi beräknar hur mycket av pixeln som ska lysas upp, dvs jämföra vinkeln mellan ljuset och normalen. går det under 0 så clampar vi till 0.
 	
-	float fDot = max(0.0f, dot(normalize(vRay), normalize(normalSamp)));
+	float fDot = max(0.0f, dot(normalize(vRay), normalize(input.Normal)));
 	
 	
 	float3 ambient = { 0.1f, 0.1f, 0.1f }; //ambientLight
@@ -123,7 +123,7 @@ float4 PS_main(PS_IN input)  : SV_Target
 	specularLight = specularLight * lightColor[0] * fDot;
 	
 	//sampla från texturen.
-	float3 s = { 0.5,0.5,0.5 };//shaderTexture.Sample(SampleType, input.Texture).xyz;
+	float3 s = shaderTexture.Sample(SampleType, input.Texture).xyz;
 	
 	//Alpha, funkar inte nu, för jag har inte "aktiverat" att hantera alpha i cpun
 	float alpha = 1.0f;
