@@ -5,6 +5,8 @@
 #include "Camera.h"
 #include "WICTextureLoader.h"
 
+//#define DEBUG_TEXTURES
+#define STANDARD_MIPMAPPING
 class DirectXHandler
 {
 private:

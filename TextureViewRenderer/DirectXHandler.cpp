@@ -57,9 +57,12 @@ int DirectXHandler::Initialize(HWND wndHandle)
 	
 	Material materials[NUM_MESH_TYPES];
 #pragma region Load textures
-	std::string texturePathSource = "Blank.png";
-
+	
+	int numMipMaps = 0;
 		std::string texturePath = "meshes/rockNormal.jpg";
+#ifdef DEBUG_TEXTURES
+		std::string texturePathSource = "Blank.png";
+		numMipMaps = 9;
 	std::string mipTexturePaths[9]
 	{
 		"MipTextures/1.png",
@@ -72,8 +75,27 @@ int DirectXHandler::Initialize(HWND wndHandle)
 		"MipTextures/8.png",
 		"MipTextures/9.png",
 	};
-	ID3D11ShaderResourceView *mipTextureSRV[9] = {nullptr};
-	ID3D11Resource*			  mipTextureRes[9] = {nullptr};
+	ID3D11ShaderResourceView *mipTextureSRV[9] = { nullptr };
+	ID3D11Resource*			  mipTextureRes[9] = { nullptr };
+#else	
+	numMipMaps = 3;
+	std::string texturePathSource = "MipTextures/0_8k_24.png";
+	std::string mipTexturePaths[3]
+	{
+		"MipTextures/1_4k_15.png",
+		"MipTextures/2_2k_9.png",
+		"MipTextures/3_1k_6.png",
+	//"MipTextures/4.png",
+	//"MipTextures/5.png",
+	//"MipTextures/6.png",
+	//"MipTextures/7.png",
+	//"MipTextures/8.png",
+	//"MipTextures/9.png",
+	};
+	ID3D11ShaderResourceView *mipTextureSRV[3] = { nullptr };
+	ID3D11Resource*			  mipTextureRes[3] = { nullptr };
+#endif
+	
 			
 	size_t length = strlen(texturePathSource.c_str());
 	wchar_t path[256];
@@ -84,9 +106,9 @@ int DirectXHandler::Initialize(HWND wndHandle)
 	{
 		printf("FAILED Loading texture");
 	}
+	m_DeviceContext->PSSetShaderResources(0, 1, &materials[0].m_TextureView);
 
-
-	for (size_t i = 0; i < 9; i++)
+	for (size_t i = 0; i < numMipMaps; i++)
 	{
 		size_t length = strlen(mipTexturePaths[i].c_str());
 		wchar_t path[256];
@@ -100,10 +122,10 @@ int DirectXHandler::Initialize(HWND wndHandle)
 		}
 
 	}
-		m_DeviceContext->PSSetShaderResources(1, 9, mipTextureSRV);
+	GenerateMipMaps(materials[0].textureResource, mipTextureRes, numMipMaps);
+	m_DeviceContext->PSSetShaderResources(1, numMipMaps, mipTextureSRV);
 #pragma endregion 
-	m_DeviceContext->PSSetShaderResources(0, 1, &materials[0].m_TextureView);
-	GenerateMipMaps(materials[0].textureResource, mipTextureRes, 9);
+	
 
 //for (size_t i = 0; i < 9; i++)
 //{
@@ -568,20 +590,19 @@ int DirectXHandler::GenerateMipMaps(ID3D11Resource * source, ID3D11Resource ** m
 	hResult = m_Device->CreateShaderResourceView(m_currentCustomTexture, &DescRV, &m_currentCustomSRV);
 	if (FAILED(hResult))
 		return 1;
-
+#ifdef STANDARD_MIPMAPPING
+		m_DeviceContext->CopySubresourceRegion(m_currentCustomTexture, 0, 0, 0, 0, source, 0, NULL);
+		m_DeviceContext->GenerateMips(m_currentCustomSRV);
+		m_DeviceContext->PSSetShaderResources(0, 1, &m_currentCustomSRV);
+#else
 	m_DeviceContext->GenerateMips(m_currentCustomSRV);
 	m_DeviceContext->PSSetShaderResources(0, 1, &m_currentCustomSRV);
-#pragma endregion
-
 	//Copy the source to the new texture resource
-
 	/* 
-		for i in numMips
-			
-			copy mipTextures[i] into newTexture.Mips[i] (Assert the resolution is the same)
+		for i in numMips		
+			copy mipTextures[i] into newTexture.Mips[i]
 	*/
 
-	//m_DeviceContext->CopyResource(newTexture, source);
 	m_DeviceContext->CopySubresourceRegion(m_currentCustomTexture, 0, 0, 0, 0, source, 0, NULL);
 
 	for (size_t i = 0; i < numMips; i++) //for eaach
@@ -589,10 +610,9 @@ int DirectXHandler::GenerateMipMaps(ID3D11Resource * source, ID3D11Resource ** m
 		m_DeviceContext->CopySubresourceRegion(m_currentCustomTexture, i + 1, 0, 0, 0, mipTextures[i], 0, NULL);
 
 	}
+#endif
 
-
-
-
+#pragma endregion
 
 	return 0;
 }
