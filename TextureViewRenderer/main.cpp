@@ -35,7 +35,7 @@ HWND InitWindow(HINSTANCE hInstance)
 		nullptr,
 		hInstance,
 		nullptr);
-
+	
 	return handle;
 }
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)

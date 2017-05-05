@@ -79,7 +79,7 @@ int DirectXHandler::Initialize(HWND wndHandle)
 	ID3D11Resource*			  mipTextureRes[9] = { nullptr };
 #else	
 	numMipMaps = 3;
-	std::string texturePathSource = "MipTextures/0_8k_24.png";
+	std::string texturePathSource = "MipTextures/1_4k_24.png";
 	std::string mipTexturePaths[3]
 	{
 		"MipTextures/1_4k_15.png",
@@ -155,9 +155,6 @@ int DirectXHandler::Initialize(HWND wndHandle)
 	samplerDesc.BorderColor[1] = 0.0f;
 	samplerDesc.BorderColor[2] = 0.0f;
 	samplerDesc.BorderColor[3] = 1.0f;
-
-
-
 
 	hr = m_Device->CreateSamplerState(&samplerDesc, &m_SampleState);
 	if (FAILED(hr))
@@ -250,7 +247,6 @@ int DirectXHandler::Render(float dt)
 
 	m_DeviceContext->RSSetState(this->m_rasterizerState); //Set the rasterstate
 
-
 	//UINT32 vertexSize = sizeof(TriangleVertex);
 	//UINT32 offset = 0;
 	//m_DeviceContext->IASetVertexBuffers(0, 1, &gVertexBuffer, &vertexSize, &offset);
@@ -279,7 +275,7 @@ int DirectXHandler::CreateContext(HWND wndHandle)
 	scd.BufferUsage		  = DXGI_USAGE_RENDER_TARGET_OUTPUT;  // how swap chain is to be used
 	scd.OutputWindow	  = wndHandle;                        // the window to be used
 	scd.SampleDesc.Count  = 1;                                // how many multisamples
-	scd.Windowed		  =	TRUE;                             // windowed/full-screen mode
+	scd.Windowed		  =	FALSE;                             // windowed/full-screen mode
 
 
 															// create a device, device context and swap chain using the information in the scd struct
@@ -348,6 +344,11 @@ int DirectXHandler::CreateContext(HWND wndHandle)
 		ID3D11Texture2D* pBackBuffer = nullptr;
 		m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
 
+		D3D11_TEXTURE2D_DESC sourceDesc;
+		ID3D11Texture2D* sourceTex;
+		pBackBuffer->QueryInterface(&sourceTex);
+		sourceTex->GetDesc(&sourceDesc);
+
 		// use the back buffer address to create the render target
 		m_Device->CreateRenderTargetView(pBackBuffer, NULL, &m_BackbufferRTV);
 		//pBackBuffer->Release();
@@ -356,8 +357,8 @@ int DirectXHandler::CreateContext(HWND wndHandle)
 		m_DeviceContext->OMSetRenderTargets(1, &m_BackbufferRTV, m_depthStencilView);
 
 		m_DeviceContext->RSSetState(this->m_rasterizerState); //Set the rasterstate
-
 	
+		m_SwapChain->SetFullscreenState(FALSE, NULL);
 	return 1;
 }
 
