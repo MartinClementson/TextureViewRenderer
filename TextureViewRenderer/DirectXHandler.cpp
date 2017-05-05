@@ -79,7 +79,7 @@ int DirectXHandler::Initialize(HWND wndHandle)
 	ID3D11Resource*			  mipTextureRes[9] = { nullptr };
 #else	
 	numMipMaps = 3;
-	std::string texturePathSource = "MipTextures/3_1k_21.png";
+	std::string texturePathSource = "MipTextures/3_1k_6.png";
 	std::string mipTexturePaths[3]
 	{
 		"MipTextures/1_4k_15.png",

@@ -112,7 +112,7 @@ float4 PS_main(PS_IN input)  : SV_Target
 	float3 ambient = { 0.1f, 0.1f, 0.1f }; //ambientLight
 	
 	 
-	float3 ks = diffuseColor[0].xyz; // Specular light färg
+	float3 ks = { 1.0,1.0,1.0 }; // Specular light färg
 	float shinyPower = 20.0f;
 	float3 lightColor = mul(diffuseColor[0].xyz, intensity[0]);
 	
